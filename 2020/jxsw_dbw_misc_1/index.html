@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/file/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/file/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/file/favicon-16x16.png">
+  <link rel="mask-icon" href="/file/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"czlz.net","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="来自星星的练习题">
+<meta property="og:type" content="article">
+<meta property="og:title" content="杂项一（大比武_CTF课_第十天）">
+<meta property="og:url" content="https://czlz.net/2020/jxsw_dbw_misc_1/index.html">
+<meta property="og:site_name" content="粗制乱造的个人网站">
+<meta property="og:description" content="来自星星的练习题">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_misc_1/hlw_0.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_misc_1/hlw_1.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_misc_1/hlw_2.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_misc_1/hlw_3.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_misc_1/GreatWall_1.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_misc_1/GreatWall_2.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_misc_1/GreatWall_3.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_misc_1/GreatWall_4.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_misc_1/easy_misc.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_misc_1/easy_misc2.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_misc_1/easy_misc3.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_misc_1/easy_misc4.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_misc_1/easy_misc5.png">
+<meta property="article:published_time" content="2020-07-16T01:57:04.227Z">
+<meta property="article:modified_time" content="2020-07-11T07:57:09.584Z">
+<meta property="article:author" content="粗制乱造">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="练习题">
+<meta property="article:tag" content="杂项">
+<meta property="article:tag" content="CTF课">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://czlz.net/2020/jxsw_dbw_misc_1/hlw_0.png">
+
+<link rel="canonical" href="https://czlz.net/2020/jxsw_dbw_misc_1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>杂项一（大比武_CTF课_第十天） | 粗制乱造的个人网站</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">粗制乱造的个人网站</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">杂七杂八的一堆东西</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-python">
+
+    <a href="/pyodide/" rel="section"><i class="fa fa-user fa-fw"></i>在线Python3.8</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://czlz.net/2020/jxsw_dbw_misc_1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/file/avatar.png">
+      <meta itemprop="name" content="粗制乱造">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="粗制乱造的个人网站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          杂项一（大比武_CTF课_第十天）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-16 09:57:04" itemprop="dateCreated datePublished" datetime="2020-07-16T09:57:04+08:00">2020-07-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-11 15:57:09" itemprop="dateModified" datetime="2020-07-11T15:57:09+08:00">2020-07-11</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/%E7%AC%94%E8%AE%B0/misc/" itemprop="url" rel="index"><span itemprop="name">misc</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/%E7%AC%94%E8%AE%B0/misc/%E9%9A%90%E5%86%99/" itemprop="url" rel="index"><span itemprop="name">隐写</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <!-- toc -->
+<pre><code>来自星星的练习题</code></pre><a id="more"></a>
+<h1 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h1><h2 id="葫芦娃"><a href="#葫芦娃" class="headerlink" title="葫芦娃"></a>葫芦娃</h2><p>最先看到的是一堆文件和一个MP3</p>
+<p><img src="hlw_0.png" alt=""></p>
+<p>所谓葫芦七兄弟嘛，把那七个文件合并成一个文件。查看文件头发现是一个jpg文件。</p>
+<p><img src="hlw_1.png" alt=""><br><img src="hlw_2.png" alt=""></p>
+<p>  网上查了一下这个葫芦小金刚的英文名留下备用<br>GourdSmallDiamond<br>接下来发现c.jpg和1.mp3中都有隐写文件。<br>用binwalk -e 把他们都释放出来，发现这两文件是一毛一样的。而且都不能用GourdSmallDiamond解开。</p>
+<p><img src="hlw_3.png" alt=""></p>
+<p>使用MP3Steno解密。得到解压密码。<br>最终拿到flag<br>MSTSEC{MSTSEC_DINGANN_KEY_IS_GSD}</p>
+<h2 id="GreatWall"><a href="#GreatWall" class="headerlink" title="GreatWall"></a>GreatWall</h2><p>一张超大的图片。拿出StegSolve来看看吧<br><img src="GreatWall_1.png" alt=""><br>按老师说的在RGB的0图层都发现了不和谐的黑色。考虑是LSB隐写<br><img src="GreatWall_2.png" alt=""><br>试了几种不同的组合，最后在BGR层看到了不同之处。这是一个JPG文件，不过有个错误的头。<br><img src="GreatWall_3.png" alt=""></p>
+<p>修复文件头后</p>
+<p><img src="GreatWall_4.png" alt=""></p>
+<p>这就很过份了。。在文件头上出现了这种东西。<br>考虑+是分隔符。—— 和 - 应当是编码。试试摩尔斯密码解密。发现不对。<br>考虑二进制——是1，-是0</p>
+<pre><code>list1 = [1010011,1110100,110011,1100111,110100,1101110,110000,1100111,1110010,110100,1110000,1101000,1111001,1011111,110001,1110011,1011111,110001,1101110,1110100,110011,1110010,110011,1110011,1110100,110001,1101110,1100111]
+result =&apos;&apos;
+for i in list1:
+  tmp = int(str(i),2)
+  result += chr(tmp)
+print(result)
+
+拿到flag{St3g4n0gr4phy_1s_1nt3r3st1ng}</code></pre><h2 id="easy-misc"><a href="#easy-misc" class="headerlink" title="easy misc"></a>easy misc</h2><p><img src="easy_misc.png" alt=""></p>
+<p>这里有一个算式，写一个python脚本计算一下</p>
+<pre><code>import math
+num = (math.sqrt(2524921)*85/5+2)/15-1794
+print(num)</code></pre><p>结果等于7。这个7是啥意思呢？试了半天，这个7的意思是7位数字加上NNULLULL,就是密码。（坑爹呀）<br><img src="easy_misc2.png" alt=""></p>
+<p>密码出来了。结果是一堆</p>
+<pre><code>a = dIW
+b = sSD
+c = adE 
+d = jVf
+e = QW8
+f = SA=
+g = jBt
+h = 5RE
+i = tRQ
+j = SPA
+k = 8DS
+l = XiE
+m = S8S
+n = MkF
+o = T9p
+p = PS5
+q = E/S
+r = -sd
+s = SQW
+t = obW
+u = /WS
+v = SD9
+w = cw=
+x = ASD
+y = FTa
+z = AE7</code></pre><p>看样子是要找到密文进行替换。<br>先去看看图片<br><img src="easy_misc3.png" alt=""></p>
+<p>分离出图片。两张是一样的，考虑盲水印<br><img src="easy_misc4.png" alt=""></p>
+<p>图片显示11.txt那么密文就是这里的内容了。<br>根据提示hint:取前16个字符。开始以为是取前面16个字符。后面发现是根据字频，取排在前面的16个字符。<br>写个脚本。</p>
+<p><img src="easy_misc5.png" alt=""></p>
+<p>跑出来结果不对，晕倒了。对比网上的答案，去掉了r和h两个字母，并且将s,i换了位置。不明所以。<br>我跑出来的base64为：</p>
+<p>QW8obWdIWT9pMkF-sd5REtRQSQWjVfXiE/WSFTajBtcw=</p>
+<p>网上解为<br>QW8obWdIWT9pMkFSQWtRQjVfXiE/WSFTajBtcw==</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/file/weixin.png" alt="粗制乱造 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/file/zfb.png" alt="粗制乱造 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CTF/" rel="tag"># CTF</a>
+              <a href="/tags/%E7%BB%83%E4%B9%A0%E9%A2%98/" rel="tag"># 练习题</a>
+              <a href="/tags/%E6%9D%82%E9%A1%B9/" rel="tag"># 杂项</a>
+              <a href="/tags/CTF%E8%AF%BE/" rel="tag"># CTF课</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/jxsw_dbw_misc_2/" rel="prev" title="杂项二（大比武_CTF课_第十一天）">
+      <i class="fa fa-chevron-left"></i> 杂项二（大比武_CTF课_第十一天）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/jxsw_dbw_web_1/" rel="next" title="MYSQL注入绕过（大比武_CTF课_第一天）">
+      MYSQL注入绕过（大比武_CTF课_第一天） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#解题"><span class="nav-number">1.</span> <span class="nav-text">解题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#葫芦娃"><span class="nav-number">1.1.</span> <span class="nav-text">葫芦娃</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#GreatWall"><span class="nav-number">1.2.</span> <span class="nav-text">GreatWall</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#easy-misc"><span class="nav-number">1.3.</span> <span class="nav-text">easy misc</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="粗制乱造"
+      src="/file/avatar.png">
+  <p class="site-author-name" itemprop="name">粗制乱造</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">粗制乱造</span>
+</div>
+  <div class="powered-by">由 <a href="https://czlz.net/" class="theme-link">czlz.net</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

