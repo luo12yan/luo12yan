@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/file/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/file/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/file/favicon-16x16.png">
+  <link rel="mask-icon" href="/file/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"czlz.net","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="密码学第二天，蒙蔽X3。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="密码学第三天（大比武_CTF课_第十五天）">
+<meta property="og:url" content="https://czlz.net/2020/jxsw_dbw_crypto_3/index.html">
+<meta property="og:site_name" content="粗制乱造的个人网站">
+<meta property="og:description" content="密码学第二天，蒙蔽X3。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_crypto_3/1.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_crypto_3/2.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_crypto_3/3.png">
+<meta property="article:published_time" content="2020-07-18T11:44:05.320Z">
+<meta property="article:modified_time" content="2020-07-18T15:01:23.468Z">
+<meta property="article:author" content="粗制乱造">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="练习题">
+<meta property="article:tag" content="密码学">
+<meta property="article:tag" content="RSA">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://czlz.net/2020/jxsw_dbw_crypto_3/1.png">
+
+<link rel="canonical" href="https://czlz.net/2020/jxsw_dbw_crypto_3/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>密码学第三天（大比武_CTF课_第十五天） | 粗制乱造的个人网站</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">粗制乱造的个人网站</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">杂七杂八的一堆东西</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-python">
+
+    <a href="/pyodide/" rel="section"><i class="fa fa-user fa-fw"></i>在线Python3.8</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://czlz.net/2020/jxsw_dbw_crypto_3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/file/avatar.png">
+      <meta itemprop="name" content="粗制乱造">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="粗制乱造的个人网站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          密码学第三天（大比武_CTF课_第十五天）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-18 19:44:05 / 修改时间：23:01:23" itemprop="dateCreated datePublished" datetime="2020-07-18T19:44:05+08:00">2020-07-18</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/%E7%AC%94%E8%AE%B0/crypto/" itemprop="url" rel="index"><span itemprop="name">crypto</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/%E7%AC%94%E8%AE%B0/crypto/%E4%BD%9C%E9%A2%98/" itemprop="url" rel="index"><span itemprop="name">作题</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <!-- toc -->
+<pre><code>密码学第二天，蒙蔽X3。</code></pre><a id="more"></a>
+<h1 id="课堂练习"><a href="#课堂练习" class="headerlink" title="课堂练习"></a>课堂练习</h1><h2 id="0x01-how-to-crack-rsa-use-python"><a href="#0x01-how-to-crack-rsa-use-python" class="headerlink" title="0x01. how to crack rsa use python"></a>0x01. how to crack rsa use python</h2><h3 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h3><p><img src="1.png" alt=""><br>题目就是两个文件。<br>通过public.key这个公钥，解开flag.enc里的内容。</p>
+<h3 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h3><p>步骤一：先将public.key中的N分离出来，以便分解q和p</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> long_to_bytes</span><br><span class="line"><span class="keyword">from</span> Crypto.PublicKey <span class="keyword">import</span> RSA</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line">path=<span class="string">"E:\\CTF\\LXT\\crypto\\3\\"</span></span><br><span class="line">keyfile=<span class="string">"public.key"</span></span><br><span class="line">flagfile=<span class="string">"flag.enc"</span></span><br><span class="line"></span><br><span class="line">RSAdata=<span class="literal">None</span></span><br><span class="line"><span class="keyword">with</span> open(path+keyfile,<span class="string">"r"</span>) <span class="keyword">as</span> file:</span><br><span class="line">    RSAdata=file.read()</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> RSAdata == <span class="literal">None</span> :</span><br><span class="line">    exit()</span><br><span class="line"></span><br><span class="line">rsa=RSA.importKey(RSAdata)</span><br><span class="line"></span><br><span class="line">print(<span class="string">"N的值："</span>,rsa.n)</span><br><span class="line"></span><br><span class="line"><span class="keyword">with</span> open(path+<span class="string">"n.txt"</span>,<span class="string">"w"</span>) <span class="keyword">as</span> file:</span><br><span class="line">    file.write(str(rsa.n)+<span class="string">"\n"</span>)</span><br></pre></td></tr></table></figure>
+
+<p>步骤二<br>使用工具分解n</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yafu-x64 &quot;factor(@)&quot; -batchfile pcat.txt</span><br></pre></td></tr></table></figure>
+<p>很快就得到分解后的数字<br><img src="2.png" alt=""></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">P7 &#x3D; 3133337</span><br><span class="line">PRP617 &#x3D; 25478326064937419292200172136399497719081842914528228316455906211693118321971399936004729134841162974144246271486439695786036588117424611881955950996219646807378822278285638261582099108339438949573034101215141156156408742843820048066830863814362379885720395082318462850002901605689761876319151147352730090957556940842144299887394678743607766937828094478336401159449035878306853716216548374273462386508307367713112073004011383418967894930554067582453248981022011922883374442736848045920676341361871231787163441467533076890081721882179369168787287724769642665399992556052144845878600126283968890273067575342061776244939</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>注：使用网站分解也可以:<a href="http://factordb.com/" target="_blank" rel="noopener">http://factordb.com/</a></p>
+</blockquote>
+<p>步骤三</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">p= <span class="number">3133337</span></span><br><span class="line">q= <span class="number">25478326064937419292200172136399497719081842914528228316455906211693118321971399936004729134841162974144246271486439695786036588117424611881955950996219646807378822278285638261582099108339438949573034101215141156156408742843820048066830863814362379885720395082318462850002901605689761876319151147352730090957556940842144299887394678743607766937828094478336401159449035878306853716216548374273462386508307367713112073004011383418967894930554067582453248981022011922883374442736848045920676341361871231787163441467533076890081721882179369168787287724769642665399992556052144845878600126283968890273067575342061776244939</span></span><br><span class="line"></span><br><span class="line">phi=(p<span class="number">-1</span>)*(q<span class="number">-1</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#求逆元</span></span><br><span class="line">d=gmpy2.invert(rsa.e,phi)</span><br><span class="line"></span><br><span class="line">print(<span class="string">"d:"</span>,d)</span><br><span class="line"></span><br><span class="line">m=pow(c,d,rsa.n)</span><br><span class="line"><span class="comment">#flag = binascii.a2b_hex(hex(m)[2:])</span></span><br><span class="line">flag=hex(m)</span><br><span class="line"></span><br><span class="line">print(<span class="string">"flag:"</span>,flag)</span><br></pre></td></tr></table></figure>
+<p>这步拿FLAG的感觉有问题，拿到的好像不是flag</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">0xb2757ec4d0be561c800b1646ee5be9f4bf4ad21770c263fc766214e48c6041d42749793d11ea683ab96e0b01d20356aab2437bc379508a77d35ce5898e8bf796ab5b22fbb728fd288ba84c2cf8342c6cf6ba0c722d2daffcbbcf36df68a4aeb59d687b890f5d2f3bfacfad469ddc154c21bbacaf5e651eb49d2eca3802f28b3582c5f6e6d91c69c3729a7f906bda152faa4d5fa118775998a7bbe4764fa53748f679403f6bc2dd29f70b767826d448b1cf88f8904aa066015d18f4f059472d08084a63eb161b68bec3a992a944cc281b749e9a5b671e4ac5fce799cbaaf631448d24f1ce2730c563754488d8ebe9ddac9c4ec52daf1dde92ebe32967e80d3bbcabe6</span><br></pre></td></tr></table></figure>
+<h2 id="0x02-rsa-some-equations"><a href="#0x02-rsa-some-equations" class="headerlink" title="0x02. rsa some equations"></a>0x02. rsa some equations</h2><h3 id="题目-1"><a href="#题目-1" class="headerlink" title="题目"></a>题目</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> getPrime,bytes_to_long</span><br><span class="line"><span class="keyword">from</span> sympy <span class="keyword">import</span> Derivative</span><br><span class="line"><span class="keyword">from</span> fractions <span class="keyword">import</span> Fraction</span><br><span class="line"><span class="keyword">from</span> secret <span class="keyword">import</span> flag</span><br><span class="line"></span><br><span class="line">p=getPrime(<span class="number">1024</span>)</span><br><span class="line">q=getPrime(<span class="number">1024</span>)</span><br><span class="line">e=<span class="number">65537</span></span><br><span class="line">n=p*q</span><br><span class="line">z=Fraction(<span class="number">1</span>,Derivative(arctan(p),p))-Fraction(<span class="number">1</span>,Derivative(arth(q),q))</span><br><span class="line">m=bytes_to_long(flag)</span><br><span class="line">c=pow(m,e,n)</span><br><span class="line">print(c,z,n)</span><br></pre></td></tr></table></figure>
+<h3 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h3><p>Fraction(a,b) = a/b<br>Derivative(f(x),x) :用来求导数<br>同时又知道了arctan和arth的导函数分别为(1/1+x^2)(1/1-x^2)<br>所以 z = p<em>p + q</em>q,又因为n = p*q。</p>
+<h3 id="解题-1"><a href="#解题-1" class="headerlink" title="解题"></a>解题</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> getPrime,bytes_to_long,long_to_bytes</span><br><span class="line"><span class="keyword">from</span> sympy <span class="keyword">import</span> Derivative</span><br><span class="line"><span class="keyword">from</span> fractions <span class="keyword">import</span> Fraction</span><br><span class="line"><span class="keyword">import</span> gmpy2</span><br><span class="line"></span><br><span class="line">c = <span class="number">7922547866857761459807491502654216283012776177789511549350672958101810281348402284098310147796549430689253803510994877420135537268549410652654479620858691324110367182025648788407041599943091386227543182157746202947099572389676084392706406084307657000104665696654409155006313203957292885743791715198781974205578654792123191584957665293208390453748369182333152809882312453359706147808198922916762773721726681588977103877454119043744889164529383188077499194932909643918696646876907327364751380953182517883134591810800848971719184808713694342985458103006676013451912221080252735948993692674899399826084848622145815461035</span></span><br><span class="line">z = <span class="number">32115748677623209667471622872185275070257924766015020072805267359839059393284316595882933372289732127274076434587519333300142473010344694803885168557548801202495933226215437763329280242113556524498457559562872900811602056944423967403777623306961880757613246328729616643032628964072931272085866928045973799374711846825157781056965164178505232524245809179235607571567174228822561697888645968559343608375331988097157145264357626738141646556353500994924115875748198318036296898604097000938272195903056733565880150540275369239637793975923329598716003350308259321436752579291000355560431542229699759955141152914708362494482</span></span><br><span class="line">n = <span class="number">15310745161336895413406690009324766200789179248896951942047235448901612351128459309145825547569298479821101249094161867207686537607047447968708758990950136380924747359052570549594098569970632854351825950729752563502284849263730127586382522703959893392329333760927637353052250274195821469023401443841395096410231843592101426591882573405934188675124326997277775238287928403743324297705151732524641213516306585297722190780088180705070359469719869343939106529204798285957516860774384001892777525916167743272419958572055332232056095979448155082465977781482598371994798871917514767508394730447974770329967681767625495394441</span></span><br><span class="line"></span><br><span class="line">p_add_q = (gmpy2.iroot(z+<span class="number">2</span>*n,<span class="number">2</span>))[<span class="number">0</span>]</span><br><span class="line">p_mul_q = (gmpy2.iroot(z<span class="number">-2</span>*n,<span class="number">2</span>))[<span class="number">0</span>]</span><br><span class="line">p = p_add_q + p_mul_q</span><br><span class="line">p = p // <span class="number">2</span></span><br><span class="line">q = p_add_q - p</span><br><span class="line"></span><br><span class="line">p = gmpy2.mpz(p)</span><br><span class="line">q = gmpy2.mpz(q)</span><br><span class="line">c = gmpy2.mpz(c)</span><br><span class="line">z = gmpy2.mpz(z)</span><br><span class="line">n = gmpy2.mpz(n)</span><br><span class="line">e = <span class="number">65537</span></span><br><span class="line">L = (q<span class="number">-1</span>) * (p<span class="number">-1</span>)</span><br><span class="line">d = gmpy2.invert(e,L)</span><br><span class="line">m = pow(c,d,n)</span><br><span class="line">flag = long_to_bytes(m)</span><br><span class="line">print(flag)</span><br></pre></td></tr></table></figure>
+<h3 id="flag"><a href="#flag" class="headerlink" title="flag"></a>flag</h3><p><img src="3.png" alt=""></p>
+<h2 id="0x03-easy-f-x-sever"><a href="#0x03-easy-f-x-sever" class="headerlink" title="0x03. easy_f(x)_sever"></a>0x03. easy_f(x)_sever</h2><h3 id="题目-2"><a href="#题目-2" class="headerlink" title="题目"></a>题目</h3><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"><span class="keyword">import</span> os,random,sys,string</span><br><span class="line"><span class="keyword">from</span> hashlib <span class="keyword">import</span> sha256</span><br><span class="line"><span class="keyword">import</span> SocketServer</span><br><span class="line"><span class="keyword">import</span> signal</span><br><span class="line"><span class="keyword">from</span> Crypto.Util.number <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> flag <span class="keyword">import</span> FLAG</span><br><span class="line"></span><br><span class="line">Nbits = <span class="number">768</span></span><br><span class="line">Pbits = <span class="number">512</span></span><br><span class="line"></span><br><span class="line">    </span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Task</span><span class="params">(SocketServer.BaseRequestHandler)</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">proof_of_work</span><span class="params">(self)</span>:</span></span><br><span class="line">        random.seed(os.urandom(<span class="number">8</span>))</span><br><span class="line">        proof = <span class="string">''</span>.join([random.choice(string.ascii_letters+string.digits) <span class="keyword">for</span> _ <span class="keyword">in</span> xrange(<span class="number">20</span>)])</span><br><span class="line">        digest = sha256(proof).hexdigest()</span><br><span class="line">        self.request.send(<span class="string">"sha256(XXXX+%s) == %s\n"</span> % (proof[<span class="number">4</span>:],digest))</span><br><span class="line">        self.request.send(<span class="string">'Give me XXXX:'</span>)</span><br><span class="line">        x = self.request.recv(<span class="number">10</span>)</span><br><span class="line">        x = x.strip()</span><br><span class="line">        <span class="keyword">if</span> len(x) != <span class="number">4</span> <span class="keyword">or</span> sha256(x+proof[<span class="number">4</span>:]).hexdigest() != digest: </span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span></span><br><span class="line">        <span class="keyword">return</span> <span class="literal">True</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">recvnum</span><span class="params">(self, sz)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            r = sz</span><br><span class="line">            res =<span class="string">""</span></span><br><span class="line">            <span class="keyword">while</span> r&gt;<span class="number">0</span>:</span><br><span class="line">                res += self.request.recv(r)</span><br><span class="line">                <span class="keyword">if</span> res.endswith(<span class="string">'\n'</span>):</span><br><span class="line">                    r = <span class="number">0</span></span><br><span class="line">                <span class="keyword">else</span>:</span><br><span class="line">                    r = sz - len(res)</span><br><span class="line">            res = res.strip()</span><br><span class="line">            t = int(res)</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            res = <span class="string">''</span></span><br><span class="line">            t = <span class="number">0</span></span><br><span class="line">        <span class="keyword">return</span> t</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">dosend</span><span class="params">(self, msg)</span>:</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            self.request.sendall(msg + <span class="string">'\n'</span>)</span><br><span class="line">        <span class="keyword">except</span>:</span><br><span class="line">            <span class="keyword">pass</span></span><br><span class="line">            </span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">f</span><span class="params">(self, k, m)</span>:</span></span><br><span class="line">        r = <span class="number">0</span></span><br><span class="line">        x = getRandomInteger(Nbits)</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(len(k)):</span><br><span class="line">            r = (r + k[i] * pow (x, i, m)) % m</span><br><span class="line">        self.dosend(<span class="string">"f(%d)=%d"</span> % (x, r))</span><br><span class="line">        <span class="keyword">return</span> x, r</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">handle</span><span class="params">(self)</span>:</span></span><br><span class="line">        signal.alarm(<span class="number">300</span>)</span><br><span class="line">        <span class="keyword">if</span> <span class="keyword">not</span> self.proof_of_work():</span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line">        signal.alarm(<span class="number">300</span>)</span><br><span class="line">        M = getPrime(Nbits)</span><br><span class="line">        self.dosend(<span class="string">"M=%d"</span> % M)</span><br><span class="line">        check = getRandomInteger(Nbits) % M</span><br><span class="line">        K = [check]</span><br><span class="line">        <span class="keyword">for</span> i <span class="keyword">in</span> range(Pbits):</span><br><span class="line">            K = K + [getRandomInteger(Nbits)]</span><br><span class="line">        </span><br><span class="line">        self.dosend(<span class="string">"How many f(x) do you want?"</span>)</span><br><span class="line">        num = self.recvnum(<span class="number">1024</span>)</span><br><span class="line">        <span class="keyword">if</span> num &gt; <span class="number">1024</span>:</span><br><span class="line">            self.dosend(<span class="string">"Nonono"</span>)</span><br><span class="line">        <span class="keyword">else</span> :</span><br><span class="line">            <span class="keyword">for</span> i <span class="keyword">in</span> range(num):</span><br><span class="line">                self.f(K, M)</span><br><span class="line">            answer = self.recvnum(<span class="number">1024</span>)</span><br><span class="line">            <span class="keyword">if</span> answer == check:</span><br><span class="line">                self.dosend(<span class="string">"%s"</span> % FLAG)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                self.dosend(<span class="string">"Nonono"</span>)</span><br><span class="line">        self.request.close()</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ForkingServer</span><span class="params">(SocketServer.ForkingTCPServer, SocketServer.TCPServer)</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">"__main__"</span>:</span><br><span class="line">    HOST, PORT = <span class="string">'0.0.0.0'</span>, <span class="number">2333</span></span><br><span class="line">    <span class="keyword">print</span> (HOST)</span><br><span class="line">    <span class="keyword">print</span> (PORT)</span><br><span class="line">    server = ForkingServer((HOST, PORT), Task)</span><br><span class="line">    server.allow_reuse_address = <span class="literal">True</span></span><br><span class="line">    server.serve_forever()</span><br></pre></td></tr></table></figure>
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/file/weixin.png" alt="粗制乱造 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/file/zfb.png" alt="粗制乱造 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CTF/" rel="tag"># CTF</a>
+              <a href="/tags/%E7%BB%83%E4%B9%A0%E9%A2%98/" rel="tag"># 练习题</a>
+              <a href="/tags/%E5%AF%86%E7%A0%81%E5%AD%A6/" rel="tag"># 密码学</a>
+              <a href="/tags/RSA/" rel="tag"># RSA</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/ctf_web_buuoj_cn_HITCON_2017_SSRF_Me_17/" rel="prev" title="【HITCON 2017】SSRFMe">
+      <i class="fa fa-chevron-left"></i> 【HITCON 2017】SSRFMe
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#课堂练习"><span class="nav-number">1.</span> <span class="nav-text">课堂练习</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-how-to-crack-rsa-use-python"><span class="nav-number">1.1.</span> <span class="nav-text">0x01. how to crack rsa use python</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目"><span class="nav-number">1.1.1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题"><span class="nav-number">1.1.2.</span> <span class="nav-text">解题</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-rsa-some-equations"><span class="nav-number">1.2.</span> <span class="nav-text">0x02. rsa some equations</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">题目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#原理"><span class="nav-number">1.2.2.</span> <span class="nav-text">原理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#解题-1"><span class="nav-number">1.2.3.</span> <span class="nav-text">解题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flag"><span class="nav-number">1.2.4.</span> <span class="nav-text">flag</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-easy-f-x-sever"><span class="nav-number">1.3.</span> <span class="nav-text">0x03. easy_f(x)_sever</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#题目-2"><span class="nav-number">1.3.1.</span> <span class="nav-text">题目</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="粗制乱造"
+      src="/file/avatar.png">
+  <p class="site-author-name" itemprop="name">粗制乱造</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">46</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">粗制乱造</span>
+</div>
+  <div class="powered-by">由 <a href="https://czlz.net/" class="theme-link">czlz.net</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>

