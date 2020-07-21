@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2">
+<meta name="theme-color" content="#222">
+<meta name="generator" content="Hexo 4.2.1">
+  <link rel="apple-touch-icon" sizes="180x180" href="/file/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/file/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/file/favicon-16x16.png">
+  <link rel="mask-icon" href="/file/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+<link rel="stylesheet" href="/lib/font-awesome/css/all.min.css">
+
+<script id="hexo-configurations">
+    var NexT = window.NexT || {};
+    var CONFIG = {"hostname":"czlz.net","root":"/","scheme":"Pisces","version":"7.8.0","exturl":false,"sidebar":{"position":"right","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":false,"show_result":false,"style":null},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
+  </script>
+
+  <meta name="description" content="前言第二天了,今天是安卓逆向">
+<meta property="og:type" content="article">
+<meta property="og:title" content="逆向第二天（大比武_CTF课_第十八天）">
+<meta property="og:url" content="https://czlz.net/2020/jxsw_dbw_reverse_2/index.html">
+<meta property="og:site_name" content="粗制乱造的个人网站">
+<meta property="og:description" content="前言第二天了,今天是安卓逆向">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_reverse_2/1.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_reverse_2/2.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_reverse_2/3.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_reverse_2/4.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_reverse_2/7_1.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_reverse_2/7_2.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_reverse_2/7_3.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_reverse_2/7_4.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_reverse_2/5_1.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_reverse_2/5_2.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_reverse_2/5_3.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_reverse_2/6_1.png">
+<meta property="og:image" content="https://czlz.net/2020/jxsw_dbw_reverse_2/8_1.png">
+<meta property="article:published_time" content="2020-07-20T16:00:00.000Z">
+<meta property="article:modified_time" content="2020-07-21T15:35:50.977Z">
+<meta property="article:author" content="粗制乱造">
+<meta property="article:tag" content="CTF">
+<meta property="article:tag" content="练习题">
+<meta property="article:tag" content="reverse">
+<meta property="article:tag" content="逆向">
+<meta property="article:tag" content="汇编">
+<meta property="article:tag" content="android">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://czlz.net/2020/jxsw_dbw_reverse_2/1.png">
+
+<link rel="canonical" href="https://czlz.net/2020/jxsw_dbw_reverse_2/">
+
+
+<script id="page-configurations">
+  // https://hexo.io/docs/variables.html
+  CONFIG.page = {
+    sidebar: "",
+    isHome : false,
+    isPost : true,
+    lang   : 'zh-CN'
+  };
+</script>
+
+  <title>逆向第二天（大比武_CTF课_第十八天） | 粗制乱造的个人网站</title>
+  
+
+
+
+
+
+
+  <noscript>
+  <style>
+  .use-motion .brand,
+  .use-motion .menu-item,
+  .sidebar-inner,
+  .use-motion .post-block,
+  .use-motion .pagination,
+  .use-motion .comments,
+  .use-motion .post-header,
+  .use-motion .post-body,
+  .use-motion .collection-header { opacity: initial; }
+
+  .use-motion .site-title,
+  .use-motion .site-subtitle {
+    opacity: initial;
+    top: initial;
+  }
+
+  .use-motion .logo-line-before i { left: initial; }
+  .use-motion .logo-line-after i { right: initial; }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="container use-motion">
+    <div class="headband"></div>
+
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏">
+      <span class="toggle-line toggle-line-first"></span>
+      <span class="toggle-line toggle-line-middle"></span>
+      <span class="toggle-line toggle-line-last"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <h1 class="site-title">粗制乱造的个人网站</h1>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+      <p class="site-subtitle" itemprop="description">杂七杂八的一堆东西</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  <ul id="menu" class="main-menu menu">
+        <li class="menu-item menu-item-home">
+
+    <a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a>
+
+  </li>
+        <li class="menu-item menu-item-tags">
+
+    <a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a>
+
+  </li>
+        <li class="menu-item menu-item-categories">
+
+    <a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a>
+
+  </li>
+        <li class="menu-item menu-item-archives">
+
+    <a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a>
+
+  </li>
+        <li class="menu-item menu-item-about">
+
+    <a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a>
+
+  </li>
+        <li class="menu-item menu-item-python">
+
+    <a href="/pyodide/" rel="section"><i class="fa fa-user fa-fw"></i>在线Python3.8</a>
+
+  </li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+        <div class="search-header">
+  <span class="search-icon">
+    <i class="fa fa-search"></i>
+  </span>
+  <div class="search-input-container">
+    <input autocomplete="off" autocapitalize="off"
+           placeholder="搜索..." spellcheck="false"
+           type="search" class="search-input">
+  </div>
+  <span class="popup-btn-close">
+    <i class="fa fa-times-circle"></i>
+  </span>
+</div>
+<div id="search-result">
+  <div id="no-result">
+    <i class="fa fa-spinner fa-pulse fa-5x fa-fw"></i>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+</div>
+    </header>
+
+    
+  <div class="back-to-top">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+
+    <main class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+
+          <div class="content post posts-expand">
+            
+
+    
+  
+  
+  <article itemscope itemtype="http://schema.org/Article" class="post-block" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://czlz.net/2020/jxsw_dbw_reverse_2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/file/avatar.png">
+      <meta itemprop="name" content="粗制乱造">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="粗制乱造的个人网站">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          逆向第二天（大比武_CTF课_第十八天）
+        </h1>
+
+        <div class="post-meta">
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-calendar"></i>
+              </span>
+              <span class="post-meta-item-text">发表于</span>
+              
+
+              <time title="创建时间：2020-07-21 00:00:00 / 修改时间：23:35:50" itemprop="dateCreated datePublished" datetime="2020-07-21T00:00:00+08:00">2020-07-21</time>
+            </span>
+            <span class="post-meta-item">
+              <span class="post-meta-item-icon">
+                <i class="far fa-folder"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/" itemprop="url" rel="index"><span itemprop="name">CTF</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">笔记</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/%E7%AC%94%E8%AE%B0/reverse/" itemprop="url" rel="index"><span itemprop="name">reverse</span></a>
+                </span>
+                  ，
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/CTF/%E7%AC%94%E8%AE%B0/reverse/Android/" itemprop="url" rel="index"><span itemprop="name">Android</span></a>
+                </span>
+            </span>
+
+          
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><pre><code>第二天了,今天是安卓逆向</code></pre><a id="more"></a>
+<hr>
+<h1 id="解题"><a href="#解题" class="headerlink" title="解题"></a>解题</h1><h2 id="0x01-DDCTF-Easy"><a href="#0x01-DDCTF-Easy" class="headerlink" title="0x01 DDCTF-Easy"></a>0x01 DDCTF-Easy</h2><p>这题最简单了,直接丢JEB里就OK了。<br><img src="1.png" alt=""></p>
+<h2 id="0x02-DDCTF-Normal"><a href="#0x02-DDCTF-Normal" class="headerlink" title="0x02 DDCTF-Normal"></a>0x02 DDCTF-Normal</h2><p>这题老师讲过，那其实也不复杂。<br><img src="2.png" alt=""><br>这里是调用了C/C++的SO库。但是这里直接明文返回了flag的运算结果。那么直接就出flag了。</p>
+<h2 id="0x03-easynative"><a href="#0x03-easynative" class="headerlink" title="0x03 easynative"></a>0x03 easynative</h2><p>有点难了，先反JEB反编译</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">int</span> v2 = <span class="number">0</span>;</span><br><span class="line"><span class="keyword">while</span>(v2 &lt; v8.length()) &#123;</span><br><span class="line">    <span class="keyword">if</span>(v8.charAt(v2) &gt;= <span class="number">97</span> &amp;&amp; v8.charAt(v2) &lt;= <span class="number">0x7A</span>) &#123;</span><br><span class="line">        v0[v2] = (<span class="keyword">byte</span>)(((v8.charAt(v2) - <span class="number">97</span>) * <span class="number">11</span> + <span class="number">2</span>) % <span class="number">26</span> + <span class="number">97</span>);</span><br><span class="line">        ++v2;</span><br><span class="line">        <span class="keyword">continue</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码显示是对输入的字符串做了处理。<br>这里有个so库，我们反编译后看到</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">bool</span> __cdecl <span class="title">Java_ctf_bayerischen_test2_MainActivity_stringFromJNI</span><span class="params">(<span class="keyword">int</span> a1, <span class="keyword">int</span> a2, <span class="keyword">int</span> a3)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">  <span class="keyword">const</span> <span class="keyword">char</span> *v3; <span class="comment">// eax</span></span><br><span class="line"></span><br><span class="line">  v3 = (<span class="keyword">const</span> <span class="keyword">char</span> *)Jstring2CStr(a1, a3);</span><br><span class="line">  <span class="keyword">return</span> <span class="built_in">strcmp</span>(v3, <span class="string">"pcdmzumssaucsg"</span>) == <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>没啥好想的了，pcdmzumssaucsg就是加密后的密文，写个脚本反推flag.</p>
+<h3 id="解题-1"><a href="#解题-1" class="headerlink" title="解题"></a>解题</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">pwd=<span class="string">"pcdmzumssaucsg"</span></span><br><span class="line"></span><br><span class="line">flag=<span class="string">""</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> t in pwd:</span><br><span class="line">    <span class="function"><span class="keyword">for</span> i in <span class="title">range</span><span class="params">(<span class="number">97</span>,<span class="number">0x7a</span>)</span>:</span></span><br><span class="line"><span class="function">        fuck</span>=((i-<span class="number">97</span>)*<span class="number">11</span>+<span class="number">2</span>)%<span class="number">26</span>+<span class="number">97</span></span><br><span class="line">        <span class="keyword">if</span>(fuck==ord(t)):</span><br><span class="line">            flag+=chr(i)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">print(flag)</span><br></pre></td></tr></table></figure>
+<p>直接撞出密码来。。哈哈</p>
+<h3 id="flag"><a href="#flag" class="headerlink" title="flag"></a>flag</h3><p>flag{nativeissoeasy}</p>
+<h2 id="0x04-gctf-mobile1"><a href="#0x04-gctf-mobile1" class="headerlink" title="0x04 gctf_mobile1"></a>0x04 gctf_mobile1</h2><p>直接反编译，这次是纯JAVA代码了，没有混淆，比较简单<br>很快定位到关键判断。<br><img src="3.png" alt=""><br>输入长度为22位的数，绕过if判断。<br><img src="4.png" alt=""><br>跟几步就拿到flag了<br>flag{bc72f242a6af3857}</p>
+<h2 id="0x05-gctf-mobile2"><a href="#0x05-gctf-mobile2" class="headerlink" title="0x05 gctf_mobile2"></a>0x05 gctf_mobile2</h2><p>这个程序不能安装，也不能运行。好奇怪。<br>好像是缺少文件。程序进行了反编译。没有什么算法，也没有flag相关的字符串<br><img src="7_1.png" alt=""><br>用apktools解包也失败，提示AndroidManifest.xml解码失败<br><img src="7_2.png" alt=""><br>看来AndroidManifest.xml里有点东西呀。打开看看<br><img src="7_3.png" alt=""><br>发现这么个东东，拿出UE细看一下。<br><img src="7_4.png" alt=""><br>这绝对是flag。<br>逆向里面还混合有杂项的题目。。晕倒。</p>
+<h3 id="flag-1"><a href="#flag-1" class="headerlink" title="flag"></a>flag</h3><p>fl4g{8d6efd232c63b7d2}</p>
+<h2 id="0x06-sdnisc-fake-func"><a href="#0x06-sdnisc-fake-func" class="headerlink" title="0x06 sdnisc_fake-func"></a>0x06 sdnisc_fake-func</h2><p>首先需要改一下这个程序的调试模式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">android:debuggable&#x3D;&quot;true&quot;</span><br></pre></td></tr></table></figure>
+<p>貌似回编译不回去。<br>直接上IDA看看源码吧。<br><img src="5_1.png" alt=""><br>看到一串base64我激动了。<br><img src="5_2.png" alt=""><br>双击点进又看到一串加密字符串。<br>看起来都像是base64,解密看看。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">c2RuaXNjc2RuaXNjYWJjZA&#x3D;&#x3D;</span><br><span class="line">base64解码后是：sdniscsdniscabcd</span><br><span class="line"></span><br><span class="line">K4&#x2F;7&#x2F;faihmk9&#x2F;WEMlfuFdpgrP86ckd4oQQ&#x2F;UeAiZdx8&#x3D;</span><br><span class="line">这个用base64 85解都是乱码，应当还有其它的东西</span><br></pre></td></tr></table></figure>
+<p>跟着‘K4’这个跳过去看到了这里。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">int __fastcall sub_E28(int a1)</span><br><span class="line">&#123;</span><br><span class="line">  int v1; &#x2F;&#x2F; r4</span><br><span class="line">  int v2; &#x2F;&#x2F; r0</span><br><span class="line">  int v3; &#x2F;&#x2F; r0</span><br><span class="line"></span><br><span class="line">  v1 &#x3D; a1;</span><br><span class="line">  v2 &#x3D; sub_E08();</span><br><span class="line">  v3 &#x3D; sub_1388(v1, v2);</span><br><span class="line">  return dword_6008(v3, &quot;K4&#x2F;7&#x2F;faihmk9&#x2F;WEMlfuFdpgrP86ckd4oQQ&#x2F;UeAiZdx8&#x3D;&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我这里由于动态调试起不来。但是感觉sub_1388应当是密码还原的地方。<br>跟着看一看发现了sub_F24这个函数有些不同，因为他调用了一张字典表。<br><img src="5_3.png" alt="111"><br>百度看一下发现是AES的。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> Crypto.Cipher <span class="keyword">import</span> AES</span><br><span class="line"><span class="keyword">import</span> base64</span><br><span class="line"></span><br><span class="line">key=<span class="string">"c2RuaXNjc2RuaXNjYWJjZA=="</span></span><br><span class="line">key=base64.b64decode(key)</span><br><span class="line"></span><br><span class="line">print(key)</span><br><span class="line"></span><br><span class="line">st=<span class="string">"K4/7/faihmk9/WEMlfuFdpgrP86ckd4oQQ/UeAiZdx8="</span></span><br><span class="line">st=base64.b64decode(st)</span><br><span class="line"></span><br><span class="line">aes= AES.new(key,AES.MODE_ECB)</span><br><span class="line"></span><br><span class="line">print(aes.decrypt(st))</span><br></pre></td></tr></table></figure>
+<p>写个代码解出来。</p>
+<h3 id="Flag"><a href="#Flag" class="headerlink" title="Flag"></a>Flag</h3><p>flag{fake_func_3nfxvs}</p>
+<h2 id="0x07-sdnisc-signin"><a href="#0x07-sdnisc-signin" class="headerlink" title="0x07 sdnisc_signin"></a>0x07 sdnisc_signin</h2><p>又是一个简单题，动态调试直接拿flag。都不用分析。<br><img src="6_1.png" alt="111"></p>
+<h3 id="flag-2"><a href="#flag-2" class="headerlink" title="flag"></a>flag</h3><p>flag{Her3_i5_y0ur_f1ag_39fbc_}</p>
+<h2 id="0x08-xman-First-Mobile"><a href="#0x08-xman-First-Mobile" class="headerlink" title="0x08 xman_First_Mobile"></a>0x08 xman_First_Mobile</h2><p>直接反编译，然后找到这个关键方法</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">static</span> &#123;</span><br><span class="line">       encode.b = <span class="keyword">new</span> <span class="keyword">byte</span>[]&#123;<span class="number">23</span>, <span class="number">22</span>, <span class="number">26</span>, <span class="number">26</span>, <span class="number">25</span>, <span class="number">25</span>, <span class="number">25</span>, <span class="number">26</span>, <span class="number">27</span>, <span class="number">28</span>, <span class="number">30</span>, <span class="number">30</span>, <span class="number">29</span>, <span class="number">30</span>, <span class="number">0x20</span>, <span class="number">0x20</span>&#125;;</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">boolean</span> <span class="title">check</span><span class="params">(String str)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">byte</span>[] input = str.getBytes();</span><br><span class="line">       <span class="keyword">byte</span>[] temp = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">16</span>];</span><br><span class="line">       <span class="keyword">int</span> i;</span><br><span class="line">       <span class="keyword">for</span>(i = <span class="number">0</span>; i &lt; <span class="number">16</span>; ++i) &#123;</span><br><span class="line">           temp[i] = (<span class="keyword">byte</span>)((input[i] + encode.b[i]) % <span class="number">61</span>);</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">int</span> v0_1;</span><br><span class="line">       <span class="keyword">for</span>(v0_1 = <span class="number">0</span>; v0_1 &lt; <span class="number">16</span>; ++v0_1) &#123;</span><br><span class="line">           temp[v0_1] = (<span class="keyword">byte</span>)(temp[v0_1] * <span class="number">2</span> - v0_1);</span><br><span class="line">       &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">return</span> <span class="keyword">new</span> String(temp).equals(str);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<h3 id="写个程序跑出flag"><a href="#写个程序跑出flag" class="headerlink" title="写个程序跑出flag"></a>写个程序跑出flag</h3><p>分析算法太慢了，我还是直接撞出flag比较快。请原谅我的懒惰。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">pwd = [<span class="number">23</span>,<span class="number">22</span>,<span class="number">26</span>,<span class="number">26</span>,<span class="number">25</span>,<span class="number">25</span>,<span class="number">25</span>,<span class="number">26</span>,<span class="number">27</span>,<span class="number">28</span>,<span class="number">30</span>,<span class="number">30</span>,<span class="number">29</span>,<span class="number">30</span>,<span class="number">32</span>,<span class="number">32</span>]</span><br><span class="line">tmp=<span class="string">""</span></span><br><span class="line"><span class="keyword">for</span> i,v <span class="keyword">in</span> enumerate(pwd):</span><br><span class="line">    <span class="keyword">for</span> j <span class="keyword">in</span> range(<span class="number">32</span>,<span class="number">126</span>):</span><br><span class="line">        t=(v+j)%<span class="number">61</span></span><br><span class="line">        t=t*<span class="number">2</span>-i</span><br><span class="line">        <span class="keyword">if</span>(t==j):</span><br><span class="line">            tmp+=chr(t)</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">print(tmp)</span><br></pre></td></tr></table></figure>
+
+<h2 id="0x09-xman-First-Mobile"><a href="#0x09-xman-First-Mobile" class="headerlink" title="0x09 xman_First_Mobile"></a>0x09 xman_First_Mobile</h2><p>这题是不是有问题呢？直接就给出了代码？</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Created by xuanyonghao on 2017/7/16.</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">XMan</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        String v6 = <span class="string">"+/abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"</span>;</span><br><span class="line">        String s = <span class="string">"xsZDluYYreJDyrpDpucZCo"</span>;</span><br><span class="line">        StringBuilder sb = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; s.length(); i++) &#123;</span><br><span class="line">            <span class="keyword">int</span> tmp = v6.indexOf(s.charAt(i));</span><br><span class="line">            String ss = Integer.toBinaryString(tmp);</span><br><span class="line">            <span class="keyword">if</span> (ss.length() == <span class="number">5</span>) &#123;</span><br><span class="line">                ss = <span class="string">"0"</span> + ss;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (ss.length() == <span class="number">4</span>) &#123;</span><br><span class="line">                ss = <span class="string">"00"</span> + ss;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (ss.length() == <span class="number">3</span>) &#123;</span><br><span class="line">                ss = <span class="string">"000"</span> + ss;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (ss.length() == <span class="number">2</span>) &#123;</span><br><span class="line">                ss = <span class="string">"0000"</span> + ss;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (ss.length() == <span class="number">1</span>) &#123;</span><br><span class="line">                ss = <span class="string">"00000"</span> + ss;</span><br><span class="line">            &#125; <span class="keyword">else</span> <span class="keyword">if</span> (ss.length() == <span class="number">0</span>) &#123;</span><br><span class="line">                ss = <span class="string">"000000"</span> + ss;</span><br><span class="line">            &#125;</span><br><span class="line">            sb.append(ss);</span><br><span class="line">        &#125;</span><br><span class="line">        String x = sb.toString() + <span class="string">"0000"</span>;</span><br><span class="line">        StringBuilder stringBuilder = <span class="keyword">new</span> StringBuilder();</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; x.length(); i += <span class="number">8</span>) &#123;</span><br><span class="line">            String tmp = x.substring(i, i + <span class="number">8</span>);</span><br><span class="line">            <span class="keyword">byte</span> b = (<span class="keyword">byte</span>) Integer.parseInt(tmp, <span class="number">2</span>);</span><br><span class="line">            stringBuilder.append((<span class="keyword">char</span>) b);</span><br><span class="line">        &#125;</span><br><span class="line">        System.out.println(stringBuilder.toString());</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="flag-3"><a href="#flag-3" class="headerlink" title="flag"></a>flag</h3><p>直接跑这个程序<br><img src="8_1.png" alt=""><br>eM_5m4Li_i4_Ea5y</p>
+
+    </div>
+
+    
+    
+    
+        <div class="reward-container">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+  <button onclick="var qr = document.getElementById('qr'); qr.style.display = (qr.style.display === 'none') ? 'block' : 'none';">
+    打赏
+  </button>
+  <div id="qr" style="display: none;">
+      
+      <div style="display: inline-block;">
+        <img src="/file/weixin.png" alt="粗制乱造 微信支付">
+        <p>微信支付</p>
+      </div>
+      
+      <div style="display: inline-block;">
+        <img src="/file/zfb.png" alt="粗制乱造 支付宝">
+        <p>支付宝</p>
+      </div>
+
+  </div>
+</div>
+
+
+      <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CTF/" rel="tag"># CTF</a>
+              <a href="/tags/%E7%BB%83%E4%B9%A0%E9%A2%98/" rel="tag"># 练习题</a>
+              <a href="/tags/reverse/" rel="tag"># reverse</a>
+              <a href="/tags/%E9%80%86%E5%90%91/" rel="tag"># 逆向</a>
+              <a href="/tags/%E6%B1%87%E7%BC%96/" rel="tag"># 汇编</a>
+              <a href="/tags/android/" rel="tag"># android</a>
+          </div>
+
+        
+
+
+        
+    <div class="post-nav">
+      <div class="post-nav-item">
+    <a href="/2020/jxsw_dbw_reverse_1/" rel="prev" title="逆向第一天（大比武_CTF课_第十六天）">
+      <i class="fa fa-chevron-left"></i> 逆向第一天（大比武_CTF课_第十六天）
+    </a></div>
+      <div class="post-nav-item"></div>
+    </div>
+      </footer>
+    
+  </article>
+  
+  
+  
+
+
+
+          </div>
+          
+
+<script>
+  window.addEventListener('tabs:register', () => {
+    let { activeClass } = CONFIG.comments;
+    if (CONFIG.comments.storage) {
+      activeClass = localStorage.getItem('comments_active') || activeClass;
+    }
+    if (activeClass) {
+      let activeTab = document.querySelector(`a[href="#comment-${activeClass}"]`);
+      if (activeTab) {
+        activeTab.click();
+      }
+    }
+  });
+  if (CONFIG.comments.storage) {
+    window.addEventListener('tabs:click', event => {
+      if (!event.target.matches('.tabs-comment .tab-content .tab-pane')) return;
+      let commentClass = event.target.classList[1];
+      localStorage.setItem('comments_active', commentClass);
+    });
+  }
+</script>
+
+        </div>
+          
+  
+  <div class="toggle sidebar-toggle">
+    <span class="toggle-line toggle-line-first"></span>
+    <span class="toggle-line toggle-line-middle"></span>
+    <span class="toggle-line toggle-line-last"></span>
+  </div>
+
+  <aside class="sidebar">
+    <div class="sidebar-inner">
+
+      <ul class="sidebar-nav motion-element">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <!--noindex-->
+      <div class="post-toc-wrap sidebar-panel">
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解题"><span class="nav-number">2.</span> <span class="nav-text">解题</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#0x01-DDCTF-Easy"><span class="nav-number">2.1.</span> <span class="nav-text">0x01 DDCTF-Easy</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x02-DDCTF-Normal"><span class="nav-number">2.2.</span> <span class="nav-text">0x02 DDCTF-Normal</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x03-easynative"><span class="nav-number">2.3.</span> <span class="nav-text">0x03 easynative</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#解题-1"><span class="nav-number">2.3.1.</span> <span class="nav-text">解题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#flag"><span class="nav-number">2.3.2.</span> <span class="nav-text">flag</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x04-gctf-mobile1"><span class="nav-number">2.4.</span> <span class="nav-text">0x04 gctf_mobile1</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x05-gctf-mobile2"><span class="nav-number">2.5.</span> <span class="nav-text">0x05 gctf_mobile2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#flag-1"><span class="nav-number">2.5.1.</span> <span class="nav-text">flag</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x06-sdnisc-fake-func"><span class="nav-number">2.6.</span> <span class="nav-text">0x06 sdnisc_fake-func</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Flag"><span class="nav-number">2.6.1.</span> <span class="nav-text">Flag</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x07-sdnisc-signin"><span class="nav-number">2.7.</span> <span class="nav-text">0x07 sdnisc_signin</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#flag-2"><span class="nav-number">2.7.1.</span> <span class="nav-text">flag</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x08-xman-First-Mobile"><span class="nav-number">2.8.</span> <span class="nav-text">0x08 xman_First_Mobile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#写个程序跑出flag"><span class="nav-number">2.8.1.</span> <span class="nav-text">写个程序跑出flag</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#0x09-xman-First-Mobile"><span class="nav-number">2.9.</span> <span class="nav-text">0x09 xman_First_Mobile</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#flag-3"><span class="nav-number">2.9.1.</span> <span class="nav-text">flag</span></a></li></ol></li></ol></li></ol></div>
+      </div>
+      <!--/noindex-->
+
+      <div class="site-overview-wrap sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="粗制乱造"
+      src="/file/avatar.png">
+  <p class="site-author-name" itemprop="name">粗制乱造</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap motion-element">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+          <a href="/archives/">
+        
+          <span class="site-state-item-count">34</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+            <a href="/categories/">
+          
+        <span class="site-state-item-count">34</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+            <a href="/tags/">
+          
+        <span class="site-state-item-count">52</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+
+
+
+      </div>
+
+    </div>
+  </aside>
+  <div id="sidebar-dimmer"></div>
+
+
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div class="footer-inner">
+        
+
+        
+
+<div class="copyright">
+  
+  &copy; 
+  <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">粗制乱造</span>
+</div>
+  <div class="powered-by">由 <a href="https://czlz.net/" class="theme-link">czlz.net</a> 强力驱动
+  </div>
+
+        
+
+
+
+
+
+
+
+
+      </div>
+    </footer>
+  </div>
+
+  
+  <script src="/lib/anime.min.js"></script>
+  <script src="/lib/velocity/velocity.min.js"></script>
+  <script src="/lib/velocity/velocity.ui.min.js"></script>
+
+<script src="/js/utils.js"></script>
+
+<script src="/js/motion.js"></script>
+
+
+<script src="/js/schemes/pisces.js"></script>
+
+
+<script src="/js/next-boot.js"></script>
+
+
+
+
+  
+
+
+
+
+  
+<script src="/js/local-search.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+  
+
+</body>
+</html>
