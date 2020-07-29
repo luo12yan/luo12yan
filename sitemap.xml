@@ -2,9 +2,23 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://czlz.net/2020/jxsw_dbw_misc_1/</loc>
+    
+    <lastmod>2020-07-26T09:15:52.561Z</lastmod>
+    
+  </url>
+  
+  <url>
+    <loc>https://czlz.net/2020/jxsw_dbw_crypto_RSA/</loc>
+    
+    <lastmod>2020-07-26T09:08:01.336Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://czlz.net/2020/jxsw_dbw_pwn_2/</loc>
     
-    <lastmod>2020-07-25T08:15:40.996Z</lastmod>
+    <lastmod>2020-07-26T09:04:01.826Z</lastmod>
     
   </url>
   
@@ -40,13 +54,6 @@
     <loc>https://czlz.net/2020/jxsw_dbw_reverse_2/</loc>
     
     <lastmod>2020-07-21T15:35:50.977Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://czlz.net/2020/jxsw_dbw_crypto_RSA/</loc>
-    
-    <lastmod>2020-07-20T03:01:56.069Z</lastmod>
     
   </url>
   
@@ -180,13 +187,6 @@
     <loc>https://czlz.net/2020/jxsw_dbw_web_8/</loc>
     
     <lastmod>2020-07-11T12:24:46.742Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://czlz.net/2020/jxsw_dbw_misc_1/</loc>
-    
-    <lastmod>2020-07-11T07:57:09.584Z</lastmod>
     
   </url>
   
